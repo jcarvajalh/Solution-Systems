@@ -1,0 +1,25 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+
+  return products.map((product) => ({
+    params: { slug: product.data.slug },
+    props: { product },
+  }));
+}
+
+export interface Props {
+  product: CollectionEntry<"products">;
+}
+
+const { product } = Astro.props;
+
+// TODO: PageHeader, ProductTabs, FeatureRow
+---
+
+<BaseLayout title={product.data.name}>
+  <p>{product.data.description}</p>
+</BaseLayout>

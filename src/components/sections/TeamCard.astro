@@ -1,0 +1,15 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  member: CollectionEntry<"team">;
+}
+
+const { member } = Astro.props;
+---
+
+<article>
+  <img src={member.data.photo} alt={member.data.name} />
+  <h3>{member.data.name}</h3>
+  <p>{member.data.role}</p>
+</article>

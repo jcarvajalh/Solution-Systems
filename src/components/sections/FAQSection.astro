@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Accordion from "@components/ui/Accordion.astro";
+
+export interface Props {
+  title?: string;
+  items: CollectionEntry<"faqs">[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section>
+  {title && <h2>{title}</h2>}
+  {
+    items.map((item) => (
+      <Accordion title={item.data.question}>{item.data.answer}</Accordion>
+    ))
+  }
+</section>

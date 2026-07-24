@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  milestones: CollectionEntry<"timeline">[];
+}
+
+const { milestones } = Astro.props;
+---
+
+<section>
+  <ol>
+    {
+      milestones.map((milestone) => (
+        <li>
+          <span>{milestone.data.year}</span>
+          <h3>{milestone.data.title}</h3>
+          <p>{milestone.data.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>

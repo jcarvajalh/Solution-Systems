@@ -1,0 +1,18 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image: string;
+  reverse?: boolean;
+}
+
+const { title, description, image, reverse = false } = Astro.props;
+---
+
+<section data-reverse={reverse}>
+  <img src={image} alt={title} />
+  <div>
+    <h3>{title}</h3>
+    <p>{description}</p>
+  </div>
+</section>

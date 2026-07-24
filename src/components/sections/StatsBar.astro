@@ -1,0 +1,25 @@
+---
+export interface Stat {
+  value: string;
+  label: string;
+}
+
+export interface Props {
+  stats: Stat[];
+}
+
+const { stats } = Astro.props;
+---
+
+<section>
+  <ul>
+    {
+      stats.map((stat) => (
+        <li>
+          <span>{stat.value}</span>
+          <span>{stat.label}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>

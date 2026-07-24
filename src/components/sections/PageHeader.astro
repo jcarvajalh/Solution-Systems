@@ -1,0 +1,16 @@
+---
+export interface Props {
+  title: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { title, subtitle, ctaLabel, ctaHref } = Astro.props;
+---
+
+<section>
+  <h1>{title}</h1>
+  {subtitle && <p>{subtitle}</p>}
+  {ctaLabel && ctaHref && <a href={ctaHref}>{ctaLabel}</a>}
+</section>
