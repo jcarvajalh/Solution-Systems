@@ -1,0 +1,24 @@
+---
+export interface Service {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+---
+
+<section>
+  {
+    services.map((service) => (
+      <article>
+        <h3>{service.title}</h3>
+        <p>{service.description}</p>
+      </article>
+    ))
+  }
+</section>

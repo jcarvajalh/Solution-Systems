@@ -1,0 +1,14 @@
+---
+import type { CollectionEntry } from "astro:content";
+import TeamCard from "./TeamCard.astro";
+
+export interface Props {
+  members: CollectionEntry<"team">[];
+}
+
+const { members } = Astro.props;
+---
+
+<section>
+  {members.map((member) => <TeamCard member={member} />)}
+</section>

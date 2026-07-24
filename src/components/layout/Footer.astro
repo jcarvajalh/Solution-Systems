@@ -1,0 +1,19 @@
+---
+import { footerNav } from "@config/navigation";
+import { siteConfig } from "@config/site";
+---
+
+<footer>
+  <p>{siteConfig.name}</p>
+  <nav>
+    <ul>
+      {
+        footerNav.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</footer>

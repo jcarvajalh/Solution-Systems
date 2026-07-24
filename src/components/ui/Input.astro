@@ -1,0 +1,28 @@
+---
+export interface Props {
+  name: string;
+  label?: string;
+  type?: "text" | "email" | "tel" | "password" | "number";
+  placeholder?: string;
+  required?: boolean;
+}
+
+const {
+  name,
+  label,
+  type = "text",
+  placeholder,
+  required = false,
+} = Astro.props;
+---
+
+<div>
+  {label && <label for={name}>{label}</label>}
+  <input
+    id={name}
+    name={name}
+    type={type}
+    placeholder={placeholder}
+    required={required}
+  />
+</div>

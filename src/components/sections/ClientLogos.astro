@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  clients: CollectionEntry<"clients">[];
+}
+
+const { clients } = Astro.props;
+---
+
+<section>
+  <ul>
+    {
+      clients.map((client) => (
+        <li>
+          <img src={client.data.logo} alt={client.data.name} />
+        </li>
+      ))
+    }
+  </ul>
+</section>

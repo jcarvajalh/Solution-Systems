@@ -1,0 +1,26 @@
+---
+import { mainNav } from "@config/navigation";
+import { siteConfig } from "@config/site";
+import NavDropdown from "./NavDropdown.astro";
+---
+
+<header>
+  <a href="/">{siteConfig.name}</a>
+  <nav>
+    <ul>
+      {
+        mainNav.map((item) =>
+          item.dropdown ? (
+            <li>
+              <NavDropdown label={item.label} items={item.dropdown} />
+            </li>
+          ) : (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ),
+        )
+      }
+    </ul>
+  </nav>
+</header>

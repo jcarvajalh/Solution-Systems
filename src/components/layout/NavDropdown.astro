@@ -1,0 +1,23 @@
+---
+import type { NavDropdownItem } from "@/types";
+
+export interface Props {
+  label: string;
+  items: NavDropdownItem[];
+}
+
+const { label, items } = Astro.props;
+---
+
+<div>
+  <button type="button">{label}</button>
+  <ul>
+    {
+      items.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

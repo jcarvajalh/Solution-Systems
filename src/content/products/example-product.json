@@ -1,0 +1,6 @@
+{
+  "slug": "example-product",
+  "name": "Producto de ejemplo",
+  "description": "Descripción de ejemplo.",
+  "features": ["Feature de ejemplo 1", "Feature de ejemplo 2"]
+}

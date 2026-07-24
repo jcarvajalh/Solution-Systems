@@ -1,0 +1,11 @@
+---
+export interface Props {
+  as?: "div" | "section" | "header" | "footer";
+}
+
+const { as: Tag = "div" } = Astro.props;
+---
+
+<Tag>
+  <slot />
+</Tag>
