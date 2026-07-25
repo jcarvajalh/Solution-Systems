@@ -8,7 +8,19 @@ export interface NavDropdownItem extends NavLink {
 }
 
 export interface NavItem extends NavLink {
+  /**
+   * Dibuja el chevron del diseño. El contenido del menú todavía no está definido
+   * en Figma, por eso es independiente de `dropdown`.
+   */
+  hasDropdown?: boolean;
   dropdown?: NavDropdownItem[];
+}
+
+export interface HeaderActions {
+  /** Botón delineado del header. */
+  secondary: NavLink;
+  /** Botón sólido (CTA principal) del header. */
+  primary: NavLink;
 }
 
 export interface SocialLinks {
