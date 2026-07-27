@@ -1,26 +1,192 @@
 ---
-import { mainNav } from "@config/navigation";
+import { Icon } from "astro-icon/components";
+
+import Container from "./Container.astro";
+import Button from "@components/ui/Button.astro";
+import { headerActions, mainNav } from "@config/navigation";
 import { siteConfig } from "@config/site";
-import NavDropdown from "./NavDropdown.astro";
+
+const currentPath = Astro.url.pathname;
+
+const isActive = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+
+const navLink = ["text-nav font-medium transition-colors", focusRing];
 ---
 
-<header>
-  <a href="/">{siteConfig.name}</a>
-  <nav>
-    <ul>
-      {
-        mainNav.map((item) =>
-          item.dropdown ? (
+<header class="bg-white">
+  <Container class="flex h-[var(--header-height)] items-center">
+    <a
+      href="/"
+      class="rounded-control focus-visible:outline-brand shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4"
+    >
+      <img
+        src="/logo-solution-systems.png"
+        alt={siteConfig.name}
+        width="193"
+        height="26"
+        class="block h-[26px] w-[193px]"
+      />
+    </a>
+
+    <nav class="nav:ml-25 nav:block hidden" aria-label="Principal">
+      <ul class="flex items-center gap-10">
+        {
+          mainNav.map((item) => (
             <li>
-              <NavDropdown label={item.label} items={item.dropdown} />
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class:list={[
+                  "ss-tap-target inline-flex items-center gap-1",
+                  navLink,
+                  isActive(item.href)
+                    ? "text-brand"
+                    : "text-ink hover:text-brand",
+                ]}
+              >
+                {item.label}
+                {item.hasDropdown && (
+                  <Icon
+                    name="lucide:chevron-down"
+                    class="size-4"
+                    aria-hidden="true"
+                  />
+                )}
+              </a>
             </li>
-          ) : (
-            <li>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ),
-        )
-      }
-    </ul>
-  </nav>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav:flex ml-auto hidden items-center gap-2.5">
+      <Button variant="secondary" size="sm" href={headerActions.secondary.href}>
+        {headerActions.secondary.label}
+      </Button>
+      <Button variant="primary" size="sm" href={headerActions.primary.href}>
+        {headerActions.primary.label}
+      </Button>
+    </div>
+
+    <button
+      type="button"
+      id="ss-nav-toggle"
+      class:list={[
+        "rounded-control text-ink nav:hidden ml-auto inline-flex size-11 items-center justify-center",
+        focusRing,
+      ]}
+      aria-expanded="false"
+      aria-controls="ss-nav-panel"
+      aria-label="Abrir menú"
+    >
+      <Icon
+        name="lucide:menu"
+        class="size-6"
+        data-icon="open"
+        aria-hidden="true"
+      />
+      <Icon
+        name="lucide:x"
+        class="hidden size-6"
+        data-icon="close"
+        aria-hidden="true"
+      />
+    </button>
+  </Container>
+
+  <!-- Figma solo define el header a 1440px. El panel compacto es una decisión de
+       implementación pendiente de validar contra un frame de diseño. -->
+  <div id="ss-nav-panel" hidden class="border-ink/10 nav:hidden border-t">
+    <Container class="py-4">
+      <nav aria-label="Principal (móvil)">
+        <ul class="flex flex-col">
+          {
+            mainNav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  class:list={[
+                    "flex h-11 items-center justify-between",
+                    navLink,
+                    isActive(item.href)
+                      ? "text-brand"
+                      : "text-ink hover:text-brand",
+                  ]}
+                >
+                  {item.label}
+                  {item.hasDropdown && (
+                    <Icon
+                      name="lucide:chevron-down"
+                      class="size-4"
+                      aria-hidden="true"
+                    />
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="mt-4 flex items-center gap-2.5">
+        <Button
+          variant="secondary"
+          size="touch"
+          href={headerActions.secondary.href}
+          class="flex-1"
+        >
+          {headerActions.secondary.label}
+        </Button>
+        <Button
+          variant="primary"
+          size="touch"
+          href={headerActions.primary.href}
+          class="flex-1"
+        >
+          {headerActions.primary.label}
+        </Button>
+      </div>
+    </Container>
+  </div>
 </header>
+
+<script>
+  const toggle = document.getElementById("ss-nav-toggle");
+  const panel = document.getElementById("ss-nav-panel");
+
+  if (toggle && panel) {
+    const openIcon = toggle.querySelector('[data-icon="open"]');
+    const closeIcon = toggle.querySelector('[data-icon="close"]');
+    const desktop = window.matchMedia("(min-width: 72rem)");
+
+    let isOpen = false;
+
+    const setOpen = (open: boolean) => {
+      isOpen = open;
+      panel.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+      openIcon?.classList.toggle("hidden", open);
+      closeIcon?.classList.toggle("hidden", !open);
+    };
+
+    toggle.addEventListener("click", () => setOpen(!isOpen));
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // El panel no existe a partir de `nav`: al ensanchar la ventana debe quedar cerrado.
+    desktop.addEventListener("change", (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>

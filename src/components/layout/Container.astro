@@ -1,11 +1,15 @@
 ---
-export interface Props {
-  as?: "div" | "section" | "header" | "footer";
+import type { HTMLAttributes } from "astro/types";
+
+type ContainerTag = "div" | "section" | "header" | "footer" | "nav";
+
+export interface Props extends HTMLAttributes<"div"> {
+  as?: ContainerTag;
 }
 
-const { as: Tag = "div" } = Astro.props;
+const { as: Tag = "div", class: className, ...rest } = Astro.props;
 ---
 
-<Tag>
+<Tag class:list={["max-w-site mx-auto w-full px-6", className]} {...rest}>
   <slot />
 </Tag>
