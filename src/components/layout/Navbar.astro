@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Container from "./Container.astro";
+import Button from "@components/ui/Button.astro";
 import { headerActions, mainNav } from "@config/navigation";
 import { siteConfig } from "@config/site";
 
@@ -14,26 +15,10 @@ const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
 const navLink = ["text-nav font-medium transition-colors", focusRing];
-
-/** Sin alto: cada uso fija el suyo (28px en desktop según Figma, 44px en el menú compacto). */
-const buttonBase = [
-  "inline-flex items-center justify-center rounded-control px-3 text-action font-semibold transition-colors",
-  focusRing,
-];
-
-const secondaryButton = [
-  ...buttonBase,
-  "border border-brand text-brand hover:bg-brand hover:text-white",
-];
-
-const primaryButton = [
-  ...buttonBase,
-  "bg-brand text-white hover:brightness-110",
-];
 ---
 
 <header class="bg-white">
-  <Container class="flex h-20 items-center">
+  <Container class="flex h-[var(--header-height)] items-center">
     <a
       href="/"
       class="rounded-control focus-visible:outline-brand shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -79,18 +64,12 @@ const primaryButton = [
     </nav>
 
     <div class="nav:flex ml-auto hidden items-center gap-2.5">
-      <a
-        href={headerActions.secondary.href}
-        class:list={["ss-tap-target h-7", secondaryButton]}
-      >
+      <Button variant="secondary" size="sm" href={headerActions.secondary.href}>
         {headerActions.secondary.label}
-      </a>
-      <a
-        href={headerActions.primary.href}
-        class:list={["ss-tap-target h-7", primaryButton]}
-      >
+      </Button>
+      <Button variant="primary" size="sm" href={headerActions.primary.href}>
         {headerActions.primary.label}
-      </a>
+      </Button>
     </div>
 
     <button
@@ -155,18 +134,22 @@ const primaryButton = [
       </nav>
 
       <div class="mt-4 flex items-center gap-2.5">
-        <a
+        <Button
+          variant="secondary"
+          size="touch"
           href={headerActions.secondary.href}
-          class:list={["h-11 flex-1", secondaryButton]}
+          class="flex-1"
         >
           {headerActions.secondary.label}
-        </a>
-        <a
+        </Button>
+        <Button
+          variant="primary"
+          size="touch"
           href={headerActions.primary.href}
-          class:list={["h-11 flex-1", primaryButton]}
+          class="flex-1"
         >
           {headerActions.primary.label}
-        </a>
+        </Button>
       </div>
     </Container>
   </div>

@@ -29,15 +29,17 @@
 }
 
 /*
-  Design tokens — fuente de verdad: Figma "Diseño arka web", componente `header SS`
-  (node 154:4651). El archivo de Figma no expone variables/estilos publicados, así
-  que los valores se extrajeron de los nodos y se normalizaron aquí. Ningún valor
-  de este bloque debe duplicarse en los componentes.
+  Design tokens — fuente de verdad: Figma "Diseño arka web", nodos `header SS`
+  (154:4651) y `Frame 12` / hero (362:1084). El archivo solo publica una variable
+  (`fondo section secu`); el resto se extrajo de los nodos y se normalizó aquí.
+  Ningún valor de este bloque debe duplicarse en los componentes.
 */
 @theme {
   /* Color */
   --color-brand: #155eef;
   --color-ink: #000000;
+  /* Única variable publicada en Figma: `fondo section secu`. */
+  --color-section-secondary: #dbdbdb;
 
   /* Tipografía */
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
@@ -51,6 +53,27 @@
   --text-action: 0.875rem;
   --text-action--line-height: 1;
   --text-action--letter-spacing: -0.28px;
+
+  /* Titular del hero: 64 / 65 / -4%, Geist SemiBold. Figma solo define 1440px;
+     por debajo escala de forma fluida hasta 36px. */
+  --text-display: clamp(2.25rem, 1.2rem + 4.2vw, 4rem);
+  --text-display--line-height: 1.015625;
+  --text-display--letter-spacing: -0.04em;
+
+  /* Entradilla: 20 / 35 / -4%, Geist Medium */
+  --text-lead: 1.25rem;
+  --text-lead--line-height: 1.75;
+  --text-lead--letter-spacing: -0.04em;
+
+  /* Datos de apoyo: 15 / 30 / -2%, Geist Medium */
+  --text-meta: 0.9375rem;
+  --text-meta--line-height: 2;
+  --text-meta--letter-spacing: -0.02em;
+
+  /* Antetítulo: 10 / normal / -2%, Geist Medium */
+  --text-eyebrow: 0.625rem;
+  --text-eyebrow--line-height: normal;
+  --text-eyebrow--letter-spacing: -0.02em;
 
   /* Radio de botones y controles */
   --radius-control: 10px;
@@ -67,6 +90,13 @@
 :root {
   /* Área táctil mínima exigida por accesibilidad (WCAG / §9 CLAUDE.md). */
   --tap-target-min: 44px;
+
+  /* Alto del header (Figma). El hero lo descuenta para calcular el suyo. */
+  --header-height: 80px;
+
+  /* Holgura entre el borde inferior del hero y el de la ventana: deja ver que
+     la página continúa. */
+  --hero-bottom-gap: 24px;
 }
 
 /*

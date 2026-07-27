@@ -1,16 +1,141 @@
 ---
-export interface Props {
-  title: string;
-  subtitle?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
-}
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 
-const { title, subtitle, ctaLabel, ctaHref } = Astro.props;
+import Container from "@components/layout/Container.astro";
+import Button from "@components/ui/Button.astro";
+import { headerActions } from "@config/navigation";
+
+import heroBackground from "@assets/images/hero-background.jpg";
+import awsLogo from "@assets/images/partners/aws.png";
+import btwLogo from "@assets/images/partners/btw.png";
+import oracleLogo from "@assets/images/partners/oracle.png";
+
+/**
+ * Los iconos van en blanco heredando el color del texto. En Figma son PNG
+ * negros sobre la foto oscura, es decir invisibles; ver reporte.
+ */
+const facts = [
+  { icon: "lucide:star", label: "+25 Años de Experiencia" },
+  { icon: "lucide:database", label: "1 ERP - 10 Módulos" },
+] as const;
+
+const partners = [
+  { src: btwLogo, alt: "BTW", width: 71, height: 33 },
+  { src: oracleLogo, alt: "Oracle", width: 131, height: 17 },
+  { src: awsLogo, alt: "Amazon Web Services", width: 55, height: 55 },
+];
 ---
 
-<section>
-  <h1>{title}</h1>
-  {subtitle && <p>{subtitle}</p>}
-  {ctaLabel && ctaHref && <a href={ctaHref}>{ctaLabel}</a>}
+<section
+  class="ss-hero bg-ink relative flex items-center overflow-hidden py-16"
+>
+  <Image
+    src={heroBackground}
+    alt=""
+    widths={[768, 1024, 1440, 1500]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 size-full -scale-x-100 object-cover"
+  />
+  <div class="ss-hero-scrim absolute inset-0" aria-hidden="true"></div>
+
+  <Container class="relative">
+    <div class="max-w-[667px]">
+      <h1 class="text-display font-semibold text-white">
+        <span class="nav:block">Soluciones de software</span> que generan <span
+          class="text-brand">confianza</span
+        >
+      </h1>
+
+      <p class="text-lead mt-3.5 max-w-[498px] font-normal text-white">
+        Servicios tecnológicos con software integrales, permitiendo optimizar
+        procesos, gestionar de forma eficiente recursos, controlar riesgos y
+        costos
+      </p>
+
+      <ul
+        class="text-meta mt-4 flex flex-wrap items-center gap-x-[35px] font-normal text-white"
+      >
+        {
+          facts.map((fact) => (
+            <li class="flex items-center gap-[5px]">
+              <Icon
+                name={fact.icon}
+                class="size-4 shrink-0"
+                aria-hidden="true"
+              />
+              {fact.label}
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        /* Contenedor flex: evita que el line-box del inline-flex altere el
+          espaciado de 12px medido en Figma. */
+      }
+      <div class="mt-3 flex">
+        <Button variant="primary" size="md" href={headerActions.primary.href}>
+          {headerActions.primary.label}
+        </Button>
+      </div>
+
+      <p class="text-eyebrow mt-7 font-normal text-white">
+        TRABAJAMOS CON HERRAMIENTAS MODERNAS
+      </p>
+
+      <div class="mt-3.5 flex flex-wrap items-center gap-x-[50px] gap-y-6">
+        {
+          partners.map((partner) => (
+            <Image
+              src={partner.src}
+              alt={partner.alt}
+              width={partner.width}
+              height={partner.height}
+              loading="lazy"
+            />
+          ))
+        }
+      </div>
+    </div>
+  </Container>
 </section>
+
+<style>
+  /*
+    El hero termina unos píxeles por encima del borde inferior de la ventana en
+    lugar de usar el alto fijo de 726px de Figma. `min-height` (y no `height`)
+    para que la sección crezca si el contenido no cabe, en vez de recortarlo.
+    La primera declaración es el respaldo para navegadores sin unidades `svh`.
+  */
+  .ss-hero {
+    min-height: calc(100vh - var(--header-height) - var(--hero-bottom-gap));
+    min-height: calc(100svh - var(--header-height) - var(--hero-bottom-gap));
+  }
+
+  /*
+    Velo de contraste. No existe en Figma: medido sobre la foto original, el
+    subtítulo queda en 1.7:1 y el titular en 1.5:1, cuando AA exige 4.5:1 y 3:1
+    (§9). Con este degradado el mínimo medido sube a 5.1:1 y el cuarto derecho
+    de la imagen —donde está el foco visual— queda intacto.
+    Va en CSS y no en Tailwind por ser un degradado multiparada (§5.2).
+  */
+  .ss-hero-scrim {
+    background-color: rgb(0 0 0 / 0.62);
+  }
+
+  @media (width >= 72rem) {
+    .ss-hero-scrim {
+      background-color: transparent;
+      background-image: linear-gradient(
+        to right,
+        rgb(0 0 0 / 0.62) 0%,
+        rgb(0 0 0 / 0.56) 50%,
+        rgb(0 0 0 / 0.16) 75%,
+        rgb(0 0 0 / 0) 100%
+      );
+    }
+  }
+</style>
