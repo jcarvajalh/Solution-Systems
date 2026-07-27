@@ -38,8 +38,23 @@
   /* Color */
   --color-brand: #155eef;
   --color-ink: #000000;
-  /* Única variable publicada en Figma: `fondo section secu`. */
+  /* Variables publicadas en Figma: `fondo section secu` y
+     `Texto secundario (sub, p de apoyo)`. */
   --color-section-secondary: #dbdbdb;
+  --color-ink-secondary: #555555;
+
+  /* Superficies de la maqueta interactiva (Figma, node 378:1141). */
+  --color-surface-muted: #f7f7f7;
+  --color-surface-chrome: #f2f0f0;
+
+  /* Estado crítico. Figma usa #ff0000, que sobre blanco da 4.00:1 e incumple
+     AA para texto; este rojo da 4.83:1. */
+  --color-critical: #d92d20;
+
+  /* Paleta categórica de las gráficas. El primer color es el de marca; ver
+     `src/features/interactive-app/lib/chart-palette.ts` para el porqué. */
+  --color-chart-2: #eb6834;
+  --color-chart-3: #1baf7a;
 
   /* Tipografía */
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
@@ -97,6 +112,20 @@
   /* Holgura entre el borde inferior del hero y el de la ventana: deja ver que
      la página continúa. */
   --hero-bottom-gap: 24px;
+}
+
+/*
+  Tailwind v4 cambió el preflight y los `<button>` pasaron a `cursor: default`.
+  Se restituye el puntero para todo control accionable, salvo los deshabilitados.
+*/
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  [role="tab"]:not(:disabled),
+  label[for],
+  summary {
+    cursor: pointer;
+  }
 }
 
 /*
