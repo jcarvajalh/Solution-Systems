@@ -39,10 +39,11 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
       <ul class="flex items-center gap-10">
         {
           mainNav.map((item) => (
-            <li>
+            <li class:list={["relative", item.dropdown && "group"]}>
               <a
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
+                aria-haspopup={item.dropdown ? "true" : undefined}
                 class:list={[
                   "ss-tap-target inline-flex items-center gap-1",
                   navLink,
@@ -55,11 +56,31 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
                 {item.hasDropdown && (
                   <Icon
                     name="lucide:chevron-down"
-                    class="size-4"
+                    class="size-4 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180 motion-reduce:transition-none"
                     aria-hidden="true"
                   />
                 )}
               </a>
+
+              {item.dropdown && (
+                <div class="invisible absolute top-full left-0 z-50 pt-3 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 motion-reduce:transition-none">
+                  <ul class="border-hairline rounded-control w-64 border bg-white p-2 shadow-lg shadow-black/5">
+                    {item.dropdown.map((sub) => (
+                      <li>
+                        <a
+                          href={sub.href}
+                          class:list={[
+                            "text-nav text-ink hover:bg-surface-muted hover:text-brand block rounded-md px-3 py-2 font-medium transition-colors",
+                            focusRing,
+                          ]}
+                        >
+                          {sub.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </li>
           ))
         }
@@ -130,6 +151,24 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
                     />
                   )}
                 </a>
+
+                {item.dropdown && (
+                  <ul class="border-ink/10 mb-2 flex flex-col border-l pl-4">
+                    {item.dropdown.map((sub) => (
+                      <li>
+                        <a
+                          href={sub.href}
+                          class:list={[
+                            "text-nav text-ink-secondary hover:text-brand flex h-10 items-center font-medium",
+                            focusRing,
+                          ]}
+                        >
+                          {sub.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))
           }

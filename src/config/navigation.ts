@@ -1,5 +1,30 @@
 import type { FooterColumn, HeaderActions, NavItem } from "@/types";
 
+export interface Product {
+  name: string;
+  slug: string;
+}
+
+/**
+ * Catálogo de productos. Fuente única para el desplegable del header, la columna
+ * del footer y las fichas (`/productos/[slug]`), que comparten diseño.
+ * TODO: confirmar con Juan — catálogo definitivo y rutas de cada producto.
+ */
+export const products: Product[] = [
+  { name: "RISK", slug: "risk" },
+  { name: "IAS Financial", slug: "ias-financial" },
+  { name: "IAS Human", slug: "ias-human" },
+  { name: "IAS Accounts", slug: "ias-accounts" },
+  { name: "IAS Operational", slug: "ias-operational" },
+  { name: "IAS NIIF", slug: "ias-niif" },
+  { name: "IAS Audit", slug: "ias-audit" },
+];
+
+const productLinks = products.map((product) => ({
+  label: product.name,
+  href: `/productos/${product.slug}`,
+}));
+
 /**
  * Orden y etiquetas tomados del header de Figma (node 154:4651).
  * `hasDropdown` marca los ítems que en el diseño llevan chevron.
@@ -7,8 +32,12 @@ import type { FooterColumn, HeaderActions, NavItem } from "@/types";
 export const mainNav: NavItem[] = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/nosotros" },
-  // TODO: confirmar con Juan — ítems del desplegable de Productos (no diseñados en Figma).
-  { label: "Productos", href: "/productos", hasDropdown: true },
+  {
+    label: "Productos",
+    href: "/productos",
+    hasDropdown: true,
+    dropdown: productLinks,
+  },
   { label: "Soluciones", href: "/soluciones" },
   // TODO: confirmar con Juan — la página /recursos no existe todavía y su
   // desplegable tampoco está diseñado en Figma.
@@ -29,16 +58,7 @@ export const footerColumns: FooterColumn[] = [
   {
     title: "Productos",
     titleHref: "/productos",
-    // TODO: confirmar con Juan — rutas individuales de cada producto (fichas).
-    links: [
-      { label: "RISK" },
-      { label: "IAS Financial" },
-      { label: "IAS Human" },
-      { label: "IAS Accounts" },
-      { label: "IAS Operational" },
-      { label: "IAS NIIF" },
-      { label: "IAS Audit" },
-    ],
+    links: productLinks,
   },
   {
     title: "Soluciones",
