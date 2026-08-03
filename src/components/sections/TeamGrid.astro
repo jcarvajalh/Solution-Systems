@@ -1,14 +1,165 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import TeamCard from "./TeamCard.astro";
+import Container from "@components/layout/Container.astro";
+import TeamMemberCard from "./TeamMemberCard.astro";
 
-export interface Props {
-  members: CollectionEntry<"team">[];
+/*
+  Fotos del equipo resueltas por slug: al soltar `jorge-perez.jpg` (png/jpg/webp)
+  en src/assets/images/team/ aparece en su tarjeta; mientras no exista se muestra
+  un marcador con las iniciales (mismo patrón que ClientLogos/ServiceCards).
+*/
+const photoFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/team/*.{png,jpg,jpeg,webp}",
+  { eager: true },
+);
+const photoBySlug = new Map(
+  Object.entries(photoFiles).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+
+interface Member {
+  name: string;
+  role: string;
+  /** Nombre del archivo en src/assets/images/team/, sin extensión. */
+  slug: string;
+  /** Tarjeta resaltada con chip de marca (primera del diseño). */
+  featured?: boolean;
 }
 
-const { members } = Astro.props;
+// TODO: confirmar con Juan — nombres y cargos reales del equipo.
+const members: Member[] = [
+  { name: "Jorge Pérez", role: "Gerente", slug: "jorge-perez", featured: true },
+  { name: "Diego Cabal", role: "Ingeniero", slug: "diego-cabal" },
+  { name: "Wilmar Aspiazu", role: "Ingeniero", slug: "wilmar-aspiazu" },
+  { name: "Juan Camilo", role: "Ingeniero", slug: "juan-camilo" },
+  { name: "Natalia Castillo", role: "Consultora", slug: "natalia-castillo" },
+  { name: "Luz Pérez", role: "Consultora", slug: "luz-perez" },
+  { name: "Jeniffer Cárdenas", role: "Consultora", slug: "jeniffer-cardenas" },
+  { name: "Marisol Gaviria", role: "RR. HH.", slug: "marisol-gaviria" },
+];
+
+const photoOf = (m: Member) => photoBySlug.get(m.slug);
+
+// En móvil cada fila es un marquee; se duplica para un ciclo sin costuras.
+const topRow = members.slice(0, 4);
+const bottomRow = members.slice(4);
 ---
 
-<section>
-  {members.map((member) => <TeamCard member={member} />)}
+<section
+  class="ss-rails border-hairline bg-surface-muted border-b"
+  aria-labelledby="equipo-heading"
+>
+  <Container class="py-12 lg:py-14">
+    <h2
+      id="equipo-heading"
+      class="text-ink text-[1.75rem] leading-[1.2] font-semibold tracking-[-0.04em] sm:text-[2rem] sm:leading-[1.4]"
+    >
+      Nuestro equipo
+    </h2>
+
+    {/* Escritorio: grid de 4 columnas */}
+    <ul
+      role="list"
+      class="mt-8 hidden grid-cols-4 gap-x-11 gap-y-10 lg:mt-10 lg:grid"
+    >
+      {
+        members.map((member) => (
+          <li>
+            <TeamMemberCard
+              name={member.name}
+              role={member.role}
+              photo={photoOf(member)}
+              featured={member.featured}
+            />
+          </li>
+        ))
+      }
+    </ul>
+
+    {/* Móvil: dos marquees automáticos en sentidos opuestos */}
+    <div class="mt-8 space-y-4 lg:hidden">
+      {
+        [
+          { row: topRow, dir: "ss-marquee--right", label: "Equipo (fila 1)" },
+          { row: bottomRow, dir: "ss-marquee--left", label: "Equipo (fila 2)" },
+        ].map(({ row, dir, label }) => (
+          <div class="ss-marquee-viewport overflow-hidden">
+            <ul
+              role="list"
+              aria-label={label}
+              class:list={["ss-marquee flex w-max gap-4", dir]}
+            >
+              {[...row, ...row].map((member, i) => (
+                <li
+                  class="w-56 shrink-0"
+                  aria-hidden={i >= row.length ? "true" : undefined}
+                >
+                  <TeamMemberCard
+                    name={member.name}
+                    role={member.role}
+                    photo={photoOf(member)}
+                    featured={member.featured}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </Container>
 </section>
+
+<style>
+  /* Marquees de la vista móvil: cada fila se duplica y se desplaza -50% para un
+     bucle continuo. Direcciones opuestas: la de arriba hacia la derecha, la de
+     abajo hacia la izquierda. */
+  @keyframes ss-team-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes ss-team-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .ss-marquee {
+    animation-duration: 28s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .ss-marquee--left {
+    animation-name: ss-team-left;
+  }
+  .ss-marquee--right {
+    animation-name: ss-team-right;
+  }
+  /* Pausa al interactuar para poder leer las tarjetas. */
+  .ss-marquee-viewport:hover .ss-marquee,
+  .ss-marquee-viewport:focus-within .ss-marquee {
+    animation-play-state: paused;
+  }
+
+  /* Sin movimiento: se detiene la animación y la fila queda desplazable a mano. */
+  @media (prefers-reduced-motion: reduce) {
+    .ss-marquee-viewport {
+      overflow-x: auto;
+    }
+    .ss-marquee {
+      animation: none;
+      transform: none;
+    }
+  }
+</style>

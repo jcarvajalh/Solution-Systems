@@ -58,10 +58,60 @@ const stats: Stat[] = [
 // TODO: confirmar historia real de la empresa
 const history =
   "Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos. Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos. Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos.";
+
+/*
+  Mapa de fondo de la línea de tiempo (placeholder): al soltar `mapa-mundi.png`
+  (png/jpg/webp/svg) en src/assets/images/about/ aparece atenuado detrás de los
+  hitos; mientras no exista se muestra un marcador.
+*/
+const mapImage = Object.entries(iconFiles).find(([path]) =>
+  path.includes("mapa-mundi"),
+)?.[1].default;
+
+interface Milestone {
+  year: string;
+  text: string;
+  /** Desfase vertical del hito en escritorio (efecto escalonado del diseño). */
+  offset: string;
+}
+
+/*
+  Hitos tomados del diseño de Figma.
+  TODO: confirmar con Juan — los hitos 2021 y 2024 nombran "Risk Solution", marca
+  que CLAUDE.md §12.2 pide NO mezclar en este sitio. Pendiente de validar el copy.
+*/
+const milestones: Milestone[] = [
+  {
+    year: "2014",
+    text: "Fundación de Solution Systems, enfocada en soluciones para el sector financiero.",
+    offset: "lg:mt-[297px]",
+  },
+  {
+    year: "2018",
+    text: "Lanzamiento del primer módulo de Riesgo de crédito y Business Intelligence.",
+    offset: "lg:mt-[240px]",
+  },
+  {
+    year: "2021",
+    text: "Incorporación de SARLAFT y Riesgo operacional al ecosistema Risk Solution.",
+    offset: "lg:mt-[271px]",
+  },
+  {
+    year: "2023",
+    text: "Integración de inteligencia artificial y RPA en Otorgamiento de crédito.",
+    offset: "lg:mt-[327px]",
+  },
+  {
+    year: "2024",
+    text: "Risk Solution: plataforma integral con 7 módulos interconectados.",
+    offset: "lg:mt-[173px]",
+  },
+];
 ---
 
-<section class="ss-rails border-hairline border-t bg-white" aria-labelledby="nosotros-heading">
-  {/* Bloque superior: titular + intro */}
+<section class="border-hairline border-t bg-white" aria-labelledby="nosotros-heading">
+  <div class="ss-rails">
+    {/* Bloque superior: titular + intro */}
   <div class="border-hairline border-b">
     <Container class="py-16 lg:pt-[7.125rem] lg:pb-[2.625rem]">
       <h1 id="nosotros-heading" class="text-display font-semibold text-ink">
@@ -121,6 +171,57 @@ const history =
       <p class="text-lead text-ink-secondary mt-6 max-w-[1047px] font-medium">
         {history}
       </p>
+    </Container>
+  </div>
+  </div>
+
+  {/* Línea de tiempo sobre el mapamundi */}
+  <div class="relative overflow-hidden border-hairline border-b bg-white">
+    {/* Mapamundi de fondo (solo escritorio) */}
+    <div
+      class="pointer-events-none absolute inset-0 z-0 hidden items-center justify-center lg:flex"
+      aria-hidden="true"
+    >
+      {
+        mapImage ? (
+          <Image
+            src={mapImage}
+            alt=""
+            class="h-full w-full object-contain opacity-[0.59]"
+          />
+        ) : (
+          <span class="border-hairline text-ink-secondary/60 rounded-md border border-dashed px-6 py-4 text-sm tracking-wide uppercase">
+            mapa-mundi
+          </span>
+        )
+      }
+    </div>
+
+    <Container class="relative z-10 py-16 lg:py-0">
+      <ol
+        class="border-brand flex flex-col gap-10 border-l-2 pl-6 lg:h-[640px] lg:flex-row lg:gap-6 lg:border-l-0 lg:pl-0"
+        aria-label="Línea de tiempo de Solution Systems"
+      >
+        {
+          milestones.map((m) => (
+            <li class="flex flex-col lg:flex-1">
+              <div class:list={[m.offset]}>
+                <p class="text-brand font-mono text-[1.5rem] leading-[1.33] font-medium tracking-[-0.02em]">
+                  {m.year}
+                </p>
+                <p class="text-ink mt-2 max-w-[15rem] text-xs leading-[1.33] tracking-[-0.02em]">
+                  {m.text}
+                </p>
+              </div>
+              {/* Línea vertical que cae hasta el borde inferior (solo escritorio). */}
+              <span
+                class="bg-brand mt-4 hidden w-0.5 flex-1 lg:block"
+                aria-hidden="true"
+              />
+            </li>
+          ))
+        }
+      </ol>
     </Container>
   </div>
 </section>
