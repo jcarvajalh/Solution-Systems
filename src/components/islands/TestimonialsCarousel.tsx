@@ -6,6 +6,20 @@ export interface Testimonial {
   role: string;
   /** Año del testimonio; se muestra junto al nombre (ej. "Mauricio Gamboa - 2023"). */
   year?: string;
+  /** Nombre de la empresa del cliente; usado para el `alt` y las iniciales. */
+  company: string;
+  /** URL optimizada del logo de la empresa; ausente mientras no exista el asset. */
+  logo?: string;
+}
+
+// Iniciales de la empresa para el marcador mientras no exista el logo real.
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0] ?? "")
+    .join("")
+    .toUpperCase();
 }
 
 export interface TestimonialsCarouselProps {
@@ -127,11 +141,25 @@ export default function TestimonialsCarousel({
               </p>
 
               <div className="flex items-center gap-3">
-                {/* TODO: reemplazar por la foto real del cliente. */}
-                <span
-                  className="bg-ink/10 size-8 shrink-0 rounded-full group-hover:bg-white/25"
-                  aria-hidden="true"
-                />
+                {item.logo ? (
+                  <img
+                    src={item.logo}
+                    alt={`Logo de ${item.company}`}
+                    width={32}
+                    height={32}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-8 shrink-0 rounded-full bg-white object-contain"
+                  />
+                ) : (
+                  /* Placeholder mientras no exista el logo real de la empresa. */
+                  <span
+                    className="bg-ink/10 text-ink-secondary flex size-8 shrink-0 items-center justify-center rounded-full text-[0.625rem] font-semibold tracking-tight uppercase group-hover:bg-white/25 group-hover:text-white"
+                    aria-hidden="true"
+                  >
+                    {initials(item.company)}
+                  </span>
+                )}
                 <div className="min-w-0">
                   <p className="text-ink truncate text-[0.875rem] leading-[1.25] font-semibold tracking-[-0.04em] group-hover:text-white">
                     {item.author}

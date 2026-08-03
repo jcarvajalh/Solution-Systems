@@ -25,7 +25,7 @@ const logos = new Map(
 ---
 
 <section
-  class="ss-rails bg-surface-muted pt-[14px] pb-[19px]"
+  class="ss-rails bg-surface-muted border-hairline border-b pt-[14px] pb-[19px]"
   aria-labelledby="clientes-heading"
 >
   <Container>
@@ -63,7 +63,7 @@ const logos = new Map(
                   <Image
                     src={logo}
                     alt={client!.name}
-                    class="max-h-14 w-auto max-w-[75%] object-contain"
+                    class="max-h-14 w-auto max-w-[75%] object-contain transition-transform duration-300 ease-out will-change-transform hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
                     loading="lazy"
                     decoding="async"
                   />

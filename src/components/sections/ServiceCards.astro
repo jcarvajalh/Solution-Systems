@@ -46,14 +46,14 @@ const cards: ServiceCard[] = [
     title: "Servicios en la nube",
     description:
       "Infraestructura Oracle Cloud en modalidad SaaS o IaaS, con niveles de servicio adaptados a tu operación.",
-    illustration: "servicios-nube-destacado",
+    illustration: "servicios-nube",
     featured: true,
   },
   {
     title: "Mesa de ayuda",
     description:
       "Infraestructura Oracle Cloud en modalidad SaaS o IaaS, con niveles de servicio adaptados a tu operación.",
-    illustration: "mesa-de-ayuda",
+    illustration: "mesa-ayuda",
   },
 ];
 ---
@@ -82,14 +82,19 @@ const cards: ServiceCard[] = [
 
       <ul
         role="list"
-        class="mt-14 grid gap-6 lg:grid-cols-3 lg:items-start lg:gap-[9px]"
+        class="ss-scroll-x mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 lg:grid lg:grid-cols-3 lg:items-start lg:gap-[9px] lg:overflow-visible lg:pb-0"
       >
         {
           cards.map((card) => {
             const image = illustrationBySlug.get(card.illustration);
 
             return (
-              <li class:list={["flex", card.featured && "lg:-mt-[17px]"]}>
+              <li
+                class:list={[
+                  "flex shrink-0 basis-[78%] snap-start sm:basis-[45%] lg:basis-auto lg:shrink lg:snap-align-none",
+                  card.featured && "lg:-mt-[17px]",
+                ]}
+              >
                 <a
                   href="/soluciones"
                   class:list={[
@@ -149,3 +154,14 @@ const cards: ServiceCard[] = [
     </div>
   </Container>
 </section>
+
+<style>
+  /* Oculta la barra de scroll del carrusel móvil sin perder el desplazamiento
+     táctil/por teclado. En lg el contenedor pasa a grid y esto es inocuo. */
+  .ss-scroll-x {
+    scrollbar-width: none;
+  }
+  .ss-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+</style>

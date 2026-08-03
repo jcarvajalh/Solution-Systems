@@ -17,7 +17,10 @@ const focusRing =
 const navLink = ["text-nav font-medium transition-colors", focusRing];
 ---
 
-<header class="bg-white">
+<header
+  id="ss-header"
+  class="bg-white sticky top-0 z-40 transition-transform duration-200 ease-out will-change-transform motion-reduce:transition-none"
+>
   <Container class="flex h-[var(--header-height)] items-center">
     <a
       href="/"
@@ -188,5 +191,39 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
     desktop.addEventListener("change", (event) => {
       if (event.matches) setOpen(false);
     });
+  }
+
+  // Auto-ocultar el header al bajar y mostrarlo al subir (transición rápida).
+  const header = document.getElementById("ss-header");
+  if (header) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const DELTA = 6; // ignora micro-scrolls para que no parpadee
+
+    const update = () => {
+      ticking = false;
+      const y = Math.max(window.scrollY, 0);
+      // Con el menú móvil abierto el header siempre queda visible.
+      const menuOpen = panel && !panel.hidden;
+      if (Math.abs(y - lastY) < DELTA && y > header.offsetHeight) return;
+
+      if (y > lastY && !menuOpen && y > header.offsetHeight) {
+        header.classList.add("-translate-y-full"); // bajando: ocultar
+      } else {
+        header.classList.remove("-translate-y-full"); // subiendo: mostrar
+      }
+      lastY = y;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
   }
 </script>

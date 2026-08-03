@@ -1,4 +1,4 @@
-import type { HeaderActions, NavItem, NavLink } from "@/types";
+import type { FooterColumn, HeaderActions, NavItem } from "@/types";
 
 /**
  * Orden y etiquetas tomados del header de Figma (node 154:4651).
@@ -21,10 +21,42 @@ export const headerActions: HeaderActions = {
   primary: { label: "Empezar ahora", href: "/contacto" },
 };
 
-export const footerNav: NavLink[] = [
-  { label: "Inicio", href: "/" },
-  { label: "Nosotros", href: "/nosotros" },
-  { label: "Soluciones", href: "/soluciones" },
-  { label: "Contacto", href: "/contacto" },
-  { label: "Soporte", href: "/soporte" },
+/**
+ * Columnas de enlaces del footer (Figma, node Frame 32). Los ítems sin `href`
+ * se pintan como texto: su ruta aún no existe/está por confirmar.
+ */
+export const footerColumns: FooterColumn[] = [
+  {
+    title: "Productos",
+    titleHref: "/productos",
+    // TODO: confirmar con Juan — rutas individuales de cada producto (fichas).
+    links: [
+      { label: "RISK" },
+      { label: "IAS Financial" },
+      { label: "IAS Human" },
+      { label: "IAS Accounts" },
+      { label: "IAS Operational" },
+      { label: "IAS NIIF" },
+      { label: "IAS Audit" },
+    ],
+  },
+  {
+    title: "Soluciones",
+    titleHref: "/soluciones",
+    links: [
+      { label: "Soluciones en la nube", href: "/soluciones" },
+      { label: "SaaS", href: "/soluciones" },
+      { label: "IaaS", href: "/soluciones" },
+      { label: "Mesa de ayuda", href: "/soporte" },
+    ],
+  },
+  {
+    title: "Recursos",
+    // TODO: confirmar con Juan — páginas de Blog, Clientes y Política de privacidad.
+    links: [
+      { label: "Blog" },
+      { label: "Clientes" },
+      { label: "Política de privacidad" },
+    ],
+  },
 ];

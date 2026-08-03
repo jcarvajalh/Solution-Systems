@@ -23,6 +23,19 @@ export interface HeaderActions {
   primary: NavLink;
 }
 
+export interface FooterLink {
+  label: string;
+  /** Sin `href` se renderiza como texto (ruta aún no definida). */
+  href?: string;
+}
+
+export interface FooterColumn {
+  title: string;
+  /** Si existe, el título de la columna es un enlace. */
+  titleHref?: string;
+  links: FooterLink[];
+}
+
 export interface SocialLinks {
   linkedin?: string;
   twitter?: string;
@@ -42,6 +55,8 @@ export interface SiteConfig {
   url: string;
   social: SocialLinks;
   contact: ContactInfo;
+  /** URL externa de la Mesa de Ayuda (botón flotante). Vacío deshabilita el botón. */
+  supportUrl?: string;
 }
 
 export interface Client {

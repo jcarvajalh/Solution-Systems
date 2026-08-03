@@ -1,0 +1,126 @@
+---
+import { Image } from "astro:assets";
+import Container from "@components/layout/Container.astro";
+
+/*
+  Iconos de las cifras resueltos por slug: al soltar `experiencia.png`,
+  `clientes.png` o `usuarios.png` (png/jpg/webp/svg) en src/assets/images/about/
+  aparecen dentro de su recuadro; mientras no existan se muestra un marcador
+  (mismo patrón que ServiceCards/ClientLogos).
+*/
+const iconFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/about/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
+const iconBySlug = new Map(
+  Object.entries(iconFiles).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+
+interface Stat {
+  /** Cifra destacada (ej. "+25 años de experiencia"). */
+  value: string;
+  /** Texto de apoyo bajo la cifra. */
+  label: string;
+  /** Nombre del archivo del icono en src/assets/images/about/, sin extensión. */
+  icon: string;
+}
+
+/*
+  Copy tomado del diseño de Figma.
+  TODO: confirmar con Juan — cifras. Datos oficiales (CLAUDE.md §2): +25 años y
+  +15 entidades. El diseño muestra "+30 clientes", "+300 usuarios activos" y
+  "15 departamentos", que aún no están verificados.
+*/
+const stats: Stat[] = [
+  {
+    value: "+25 años de experiencia",
+    label: "Ayudando a entidades financieras desde 1998 a crecer.",
+    icon: "experiencia",
+  },
+  {
+    value: "+30 clientes",
+    label: "Tenemos clientes en 15 diferentes departamentos de Colombia.",
+    icon: "clientes",
+  },
+  {
+    value: "+300 usuarios activos",
+    label: "Actualmente nuestros sistemas los usan más de 300 usuarios.",
+    icon: "usuarios",
+  },
+];
+
+// TODO: confirmar historia real de la empresa
+const history =
+  "Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos. Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos. Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos.";
+---
+
+<section class="ss-rails border-hairline border-t bg-white" aria-labelledby="nosotros-heading">
+  {/* Bloque superior: titular + intro */}
+  <div class="border-hairline border-b">
+    <Container class="py-16 lg:pt-[7.125rem] lg:pb-[2.625rem]">
+      <h1 id="nosotros-heading" class="text-display font-semibold text-ink">
+        Somos Solution Systems
+      </h1>
+      <p class="text-lead text-ink-secondary mt-8 max-w-[609px] font-medium">
+        Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos,
+        combinando experiencia, cercanía y respaldo técnico especializado.
+      </p>
+    </Container>
+  </div>
+
+  {/* Banda de cifras */}
+  <div class="border-hairline bg-surface-muted border-b">
+    <Container class="py-12 lg:py-10">
+      <ul
+        role="list"
+        class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6"
+      >
+        {
+          stats.map((stat) => {
+            const icon = iconBySlug.get(stat.icon);
+
+            return (
+              <li class="flex flex-col items-center text-center">
+                <span class="bg-section-secondary rounded-control flex size-14 items-center justify-center">
+                  {icon ? (
+                    // TODO: describir el icono en `alt` al reemplazar el placeholder.
+                    <Image src={icon} alt="" class="size-[38px] object-contain" />
+                  ) : (
+                    <span
+                      class="border-ink/20 size-[38px] rounded-md border border-dashed"
+                      aria-hidden="true"
+                    />
+                  )}
+                </span>
+                <p class="text-ink mt-5 text-[1.5rem] leading-[1.29] font-semibold tracking-[-0.04em]">
+                  {stat.value}
+                </p>
+                <p class="text-ink-secondary mt-3 max-w-[248px] text-[1.125rem] leading-[1.39] font-medium tracking-[-0.04em]">
+                  {stat.label}
+                </p>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </Container>
+  </div>
+
+  {/* Bloque inferior: nuestra historia */}
+  <div class="border-hairline border-b">
+    <Container class="py-12 lg:pt-[1.625rem] lg:pb-16">
+      <h2 class="text-ink text-[1.75rem] leading-[1.2] font-semibold tracking-[-0.04em] sm:text-[2rem] sm:leading-[1.31]">
+        Nuestra historia
+      </h2>
+      <p class="text-lead text-ink-secondary mt-6 max-w-[1047px] font-medium">
+        {history}
+      </p>
+    </Container>
+  </div>
+</section>
