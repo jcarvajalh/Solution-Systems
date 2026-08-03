@@ -43,3 +43,10 @@ export interface SiteConfig {
   social: SocialLinks;
   contact: ContactInfo;
 }
+
+export interface Client {
+  /** Nombre de la entidad. Se usa como texto alternativo del logo. */
+  name: string;
+  /** Nombre del archivo en src/assets/images/clients/, sin extensión. */
+  slug: string;
+}

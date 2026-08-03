@@ -1,21 +1,83 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import Container from "@/components/layout/Container.astro";
+import { clients, clientsHeading } from "@/config/site";
 
-export interface Props {
-  clients: CollectionEntry<"clients">[];
-}
+/*
+  Los logos se resuelven por nombre de archivo: basta con soltar `infihuila.png`
+  en src/assets/images/clients/ para que aparezca. Mientras no exista el archivo
+  se pinta un marcador con el nombre, así la sección no rompe el build.
+*/
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/clients/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
 
-const { clients } = Astro.props;
+const logos = new Map(
+  Object.entries(files).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
 ---
 
-<section>
-  <ul>
-    {
-      clients.map((client) => (
-        <li>
-          <img src={client.data.logo} alt={client.data.name} />
-        </li>
-      ))
-    }
-  </ul>
+<section
+  class="ss-rails bg-surface-muted pt-[14px] pb-[19px]"
+  aria-labelledby="clientes-heading"
+>
+  <Container>
+    <h2
+      id="clientes-heading"
+      class="text-lead text-ink-secondary mx-auto max-w-[36rem] text-center font-medium lg:max-w-none"
+    >
+      {
+        clientsHeading.map((line, i) => (
+          <Fragment>
+            {i > 0 && <br class="hidden lg:inline" />}
+            {i > 0 ? ` ${line}` : line}
+          </Fragment>
+        ))
+      }
+    </h2>
+
+    <div
+      class="rounded-surface border-hairline mt-[11px] overflow-hidden border bg-white"
+    >
+      <ul
+        role="list"
+        class="-mr-px -mb-px grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+      >
+        {
+          clients.map((client) => {
+            const logo = client ? logos.get(client.slug) : undefined;
+
+            return (
+              <li
+                class="border-hairline flex aspect-[426/227] items-center justify-center border-r border-b px-6 py-5"
+                aria-hidden={client ? undefined : "true"}
+              >
+                {logo && (
+                  <Image
+                    src={logo}
+                    alt={client!.name}
+                    class="max-h-14 w-auto max-w-[75%] object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                {client && !logo && (
+                  <span class="border-hairline text-eyebrow text-ink-secondary rounded border border-dashed px-2 py-1 text-center uppercase">
+                    {client.name}
+                  </span>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </Container>
 </section>
