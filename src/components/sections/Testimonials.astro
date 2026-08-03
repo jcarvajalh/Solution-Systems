@@ -1,0 +1,48 @@
+---
+import Container from "@components/layout/Container.astro";
+import TestimonialsCarousel, {
+  type Testimonial,
+} from "@components/islands/TestimonialsCarousel";
+
+/*
+  Texto placeholder tomado del diseño de Figma (todas las tarjetas repiten la
+  misma cita). Pendiente de reemplazar por testimonios reales de la colección
+  `testimonials`.
+*/
+// TODO: confirmar con Juan — testimonios reales (autor, cargo, cita, año).
+const quote =
+  "Optimizamos nuestra operación con Solution Systems. Soporte rápido, equipo que entiende el sector financiero.";
+
+const testimonials: Testimonial[] = [
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2023" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2025" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2021" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2022" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2024" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2020" },
+];
+---
+
+<section
+  class="ss-rails border-hairline border-b bg-white py-16 lg:py-[95px]"
+  aria-labelledby="testimonios-heading"
+>
+  <Container>
+    <h2
+      id="testimonios-heading"
+      class="text-ink max-w-[657px] text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.02em] lg:text-[3rem]"
+    >
+      Clientes que hablan por nosotros
+    </h2>
+    <p
+      class="text-ink-secondary mt-6 max-w-[635px] text-[1.125rem] leading-[1.28] font-normal tracking-[-0.02em]"
+    >
+      Testimonios reales de clientes que han optimizado su operación con nuestras
+      soluciones tecnológicas.
+    </p>
+  </Container>
+
+  <Container class="mt-12">
+    <TestimonialsCarousel testimonials={testimonials} client:visible />
+  </Container>
+</section>
