@@ -1,7 +1,41 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import CloudServices from "@components/sections/CloudServices.astro";
+import { siteConfig } from "@config/site";
 
-// TODO: PageHeader, ServiceCards, FeatureRow
+const description =
+  "Servicios en la nube sobre infraestructura Oracle y AWS para bancos, cooperativas y fondos: disponibilidad 24/7, bases de datos empresariales y desarrollo a medida.";
+
+const provider = { "@type": "Organization", name: siteConfig.name };
+const areaServed = { "@type": "Country", name: "Colombia" };
+
+// Datos estructurados de los dos servicios (§8). Solo datos verificables.
+const serviceSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: "Servicios en la nube",
+    provider,
+    areaServed,
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: "Mesa de ayuda",
+    provider,
+    areaServed,
+    description:
+      "Mesa de ayuda de soporte técnico para el ciclo de vida de cada requerimiento de entidades financieras.",
+  },
+];
 ---
 
-<BaseLayout title="Soluciones" />
+<BaseLayout title="Servicios en la nube" description={description}>
+  <CloudServices />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(serviceSchema)}
+    is:inline
+  />
+</BaseLayout>
