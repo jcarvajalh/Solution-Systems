@@ -60,6 +60,43 @@ src/
 
 `@/*`, `@components/*`, `@layouts/*`, `@lib/*`, `@config/*`, `@features/*`, `@assets/*` — definidos en `tsconfig.json`.
 
+## Formulario de contacto (EmailJS + reCAPTCHA)
+
+El sitio es estático (Cloudflare Pages): el formulario de `/contacto` envía el
+correo desde el navegador con [EmailJS](https://www.emailjs.com) y se protege
+con reCAPTCHA v2 **Invisible**. No hay backend propio.
+
+### Variables de entorno
+
+Copia `.env.example` a `.env` y complétalas (todas con prefijo `PUBLIC_`, van al
+bundle del cliente por diseño):
+
+| Variable | De dónde sale |
+| :-- | :-- |
+| `PUBLIC_EMAILJS_SERVICE_ID` | EmailJS → Email Services |
+| `PUBLIC_EMAILJS_TEMPLATE_ID` | EmailJS → Email Templates |
+| `PUBLIC_EMAILJS_PUBLIC_KEY` | EmailJS → Account → API Keys (Public Key) |
+| `PUBLIC_RECAPTCHA_SITE_KEY` | Google reCAPTCHA → v2 Invisible → Site Key |
+
+> Registra **las mismas variables** en Cloudflare Pages → Settings →
+> Environment variables (entornos Production y Preview).
+
+### Configuración manual
+
+1. **Google reCAPTCHA** (admin console): crea un sitio tipo **reCAPTCHA v2 →
+   "Casilla invisible"**, agrega los dominios (incluye `localhost` para probar).
+   Copia el *Site Key* a `PUBLIC_RECAPTCHA_SITE_KEY` y guarda el *Secret Key*
+   para el paso siguiente (no va al repo).
+2. **EmailJS**:
+   - Crea un *Email Service* y un *Email Template*. El template debe usar estas
+     variables: `{{from_name}}`, `{{nombre}}`, `{{apellido}}`, `{{email}}`,
+     `{{telefono}}`, `{{empresa}}`, `{{mensaje}}`. Configura el *Reply-To* del
+     template con `{{email}}`.
+   - En el servicio/plantilla, activa la integración de **reCAPTCHA** y pega el
+     *Secret Key* del paso 1 (así se valida el token `g-recaptcha-response`).
+   - En **Account → Security**: activa *Use reСAPTCHA*, la **allowlist de
+     dominios** y el **rate limiting**.
+
 ## Próximos pasos
 
-Esta fase no incluye estilos visuales, tema de Tailwind, maquetado de secciones ni contenido real. Eso corresponde a fases posteriores.
+Maquetado de secciones y contenido real en curso.

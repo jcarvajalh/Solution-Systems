@@ -154,7 +154,13 @@ const placeholder =
             }
           </ul>
 
-          <Button variant="inverse" size="sm" href="/soporte">
+          <Button
+            variant="inverse"
+            size="sm"
+            href={siteConfig.supportUrl || "/soporte"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Mesa de ayuda
           </Button>
         </div>
@@ -189,7 +195,13 @@ const placeholder =
                   {col.links.map((link) => (
                     <li>
                       {link.href ? (
-                        <a href={link.href} class={linkClass}>
+                        <a
+                          href={link.href}
+                          class={linkClass}
+                          {...(link.href.startsWith("http")
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                        >
                           {link.label}
                         </a>
                       ) : (

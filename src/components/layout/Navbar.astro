@@ -88,7 +88,13 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
     </nav>
 
     <div class="nav:flex ml-auto hidden items-center gap-2.5">
-      <Button variant="secondary" size="sm" href={headerActions.secondary.href}>
+      <Button
+        variant="secondary"
+        size="sm"
+        href={headerActions.secondary.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {headerActions.secondary.label}
       </Button>
       <Button variant="primary" size="sm" href={headerActions.primary.href}>
@@ -180,6 +186,8 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
           variant="secondary"
           size="touch"
           href={headerActions.secondary.href}
+          target="_blank"
+          rel="noopener noreferrer"
           class="flex-1"
         >
           {headerActions.secondary.label}

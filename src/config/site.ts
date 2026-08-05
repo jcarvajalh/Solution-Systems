@@ -17,8 +17,12 @@ export const siteConfig: SiteConfig = {
     phone: "+57 3018135745",
     address: "",
   },
-  // TODO: confirmar con Juan — URL externa de la Mesa de Ayuda (botón flotante).
-  supportUrl: "",
+  // Portal de Mesa de Ayuda (Oracle APEX). Fuente única: la usan el botón
+  // flotante y los botones de "Soporte" / "Mesa de ayuda".
+  // TODO: confirmar con Juan — el `?session=` parece específico de una sesión;
+  // conviene una URL de login estable.
+  supportUrl:
+    "https://g553d75c29da6f6-d9l8quf3dkjc8ult.adb.us-ashburn-1.oraclecloudapps.com/ords/r/ws_ias/solution-systems/login?session=113980180682589",
 };
 
 /** Titular de la rejilla. El salto es del diseño (≥1024px); abajo el texto fluye solo. */

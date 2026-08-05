@@ -1,0 +1,926 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Container from "@components/layout/Container.astro";
+
+/*
+  Política de Privacidad y Tratamiento de Datos Personales (Ley 1581 de 2012).
+  Documento legal: la tipografía de prosa se resuelve con CSS co-localizado bajo
+  `.ss-legal` (§5.2) para no repetir clases en decenas de elementos.
+
+  Datos por completar antes de publicar (Anexo D): los que aún no tenemos van
+  marcados con `.ss-tbd`. Se rellenan los que ya son públicos en el sitio
+  (dirección, teléfono, correo de contacto). No se inventan datos (§12.1).
+*/
+
+// Campos rellenables en un solo lugar. `null` => placeholder por confirmar.
+const org = {
+  razonSocial: null,
+  nit: null,
+  domicilio:
+    "Edificio Santa Mónica Central, Calle 22 Norte #6AN-24, Cali, Valle del Cauca, Colombia",
+  emailContacto: "contacto@e-solutionsystems.net",
+  emailDatos: null, // p. ej. protecciondedatos@e-solutionsystems.net
+  telefono: "+57 301 813 5745",
+  web: null,
+  fechaVigencia: null,
+  ultimaActualizacion: null,
+  version: "1.0",
+  area: null,
+  horario: null,
+  formularioDerechos: null,
+};
+
+const description =
+  "Política de Privacidad y Tratamiento de Datos Personales de Solution Systems, conforme a la Ley 1581 de 2012.";
+---
+
+<BaseLayout title="Política de privacidad" description={description}>
+  <section class="ss-rails border-y border-black/20 bg-white">
+    <div class="h-[53px] border-b border-black/20"></div>
+
+    <Container class="py-12 lg:py-16">
+      <article class="ss-legal mx-auto max-w-[760px]">
+        <header>
+          <h1>Política de Privacidad y Tratamiento de Datos Personales</h1>
+          <p class="ss-legal-org">Solution Systems</p>
+
+          <dl class="ss-legal-meta">
+            <div>
+              <dt>Fecha de entrada en vigencia</dt>
+              <dd>
+                {
+                  org.fechaVigencia ?? (
+                    <span class="ss-tbd">[DD] de [MES] de [AAAA]</span>
+                  )
+                }
+              </dd>
+            </div>
+            <div>
+              <dt>Última actualización</dt>
+              <dd>
+                {
+                  org.ultimaActualizacion ?? (
+                    <span class="ss-tbd">[DD] de [MES] de [AAAA]</span>
+                  )
+                }
+              </dd>
+            </div>
+            <div>
+              <dt>Versión</dt>
+              <dd>{org.version}</dd>
+            </div>
+          </dl>
+        </header>
+
+        <h2>1. Identificación del Responsable del Tratamiento</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">Razón social</th>
+              <td>
+                {
+                  org.razonSocial ?? (
+                    <span class="ss-tbd">[RAZÓN SOCIAL COMPLETA]</span>
+                  )
+                } (en adelante, «Solution Systems»)
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">NIT</th>
+              <td>
+                {
+                  org.nit ?? (
+                    <span class="ss-tbd">[NIT CON DÍGITO DE VERIFICACIÓN]</span>
+                  )
+                }
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Domicilio principal</th>
+              <td>{org.domicilio}</td>
+            </tr>
+            <tr>
+              <th scope="row">Correo electrónico de contacto</th>
+              <td>
+                <a href={`mailto:${org.emailContacto}`}>{org.emailContacto}</a>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Teléfono</th>
+              <td>{org.telefono}</td>
+            </tr>
+            <tr>
+              <th scope="row">Sitio web</th>
+              <td>
+                {
+                  org.web ?? (
+                    <span class="ss-tbd">[https://www.dominio.com]</span>
+                  )
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Solution Systems actúa como <strong>Responsable del Tratamiento</strong>
+          respecto de los datos personales que recolecta directamente a través de
+          sus canales corporativos, y como <strong>Encargado del Tratamiento</strong>
+          cuando trata datos personales por cuenta de sus clientes en el marco de
+          la prestación de servicios de software y soporte tecnológico.
+        </p>
+
+        <h2>2. Marco legal</h2>
+        <p>Esta política se adopta en cumplimiento de:</p>
+        <ul>
+          <li>
+            <strong>Constitución Política de Colombia</strong>, artículos 15 y 20.
+          </li>
+          <li>
+            <strong>Ley 1581 de 2012</strong>, por la cual se dictan disposiciones
+            generales para la protección de datos personales.
+          </li>
+          <li>
+            <strong>Decreto 1074 de 2015</strong> (Decreto Único Reglamentario del
+            Sector Comercio, Industria y Turismo), Capítulo 25, que compiló el
+            Decreto 1377 de 2013.
+          </li>
+          <li>
+            <strong>Ley 1266 de 2008</strong> (Habeas Data), aplicable al
+            tratamiento de información financiera, crediticia, comercial y de
+            servicios.
+          </li>
+          <li>
+            <strong>Ley 1273 de 2009</strong>, sobre protección de la información y
+            de los datos.
+          </li>
+          <li><strong>Ley 2157 de 2021</strong> y demás normas concordantes.</li>
+          <li>
+            Circulares e instrucciones de la <strong>Superintendencia de Industria
+            y Comercio (SIC)</strong>.
+          </li>
+        </ul>
+
+        <h2>3. Ámbito de aplicación</h2>
+        <p>
+          Esta política aplica a todos los datos personales registrados en las
+          bases de datos de Solution Systems, cuyo tratamiento sea realizado por la
+          compañía, sus colaboradores, contratistas o Encargados designados. Cobija,
+          entre otros, los datos de:
+        </p>
+        <ul>
+          <li>
+            Clientes actuales y potenciales (entidades financieras, cooperativas,
+            fondos de inversión y sus representantes).
+          </li>
+          <li>
+            Visitantes del sitio web que diligencian formularios de contacto.
+          </li>
+          <li>Proveedores y contratistas.</li>
+          <li>Aspirantes a vacantes laborales.</li>
+          <li>Colaboradores y sus beneficiarios.</li>
+          <li>Usuarios de la mesa de ayuda y portales de soporte.</li>
+        </ul>
+
+        <h2>4. Definiciones</h2>
+        <ul>
+          <li>
+            <strong>Autorización:</strong> consentimiento previo, expreso e
+            informado del Titular para llevar a cabo el tratamiento de sus datos
+            personales.
+          </li>
+          <li>
+            <strong>Base de datos:</strong> conjunto organizado de datos personales
+            objeto de tratamiento.
+          </li>
+          <li>
+            <strong>Dato personal:</strong> cualquier información vinculada o que
+            pueda asociarse a una o varias personas naturales determinadas o
+            determinables.
+          </li>
+          <li>
+            <strong>Dato público:</strong> dato calificado como tal según la ley o
+            la Constitución, y aquel que no sea semiprivado, privado o sensible.
+          </li>
+          <li>
+            <strong>Dato sensible:</strong> aquel que afecta la intimidad del
+            Titular o cuyo uso indebido puede generar discriminación (origen racial
+            o étnico, orientación política, convicciones religiosas o filosóficas,
+            pertenencia a sindicatos, datos de salud, vida sexual y datos
+            biométricos).
+          </li>
+          <li>
+            <strong>Encargado del Tratamiento:</strong> persona natural o jurídica
+            que realiza el tratamiento de datos personales por cuenta del
+            Responsable.
+          </li>
+          <li>
+            <strong>Responsable del Tratamiento:</strong> persona natural o jurídica
+            que decide sobre la base de datos y el tratamiento de los datos.
+          </li>
+          <li>
+            <strong>Titular:</strong> persona natural cuyos datos personales son
+            objeto de tratamiento.
+          </li>
+          <li>
+            <strong>Transferencia:</strong> envío de datos a un receptor que actúa
+            como Responsable, dentro o fuera del país.
+          </li>
+          <li>
+            <strong>Transmisión:</strong> comunicación de datos a un Encargado para
+            que realice el tratamiento por cuenta del Responsable.
+          </li>
+          <li>
+            <strong>Tratamiento:</strong> cualquier operación sobre datos personales,
+            como recolección, almacenamiento, uso, circulación o supresión.
+          </li>
+        </ul>
+
+        <h2>5. Principios aplicables</h2>
+        <p>
+          El tratamiento de datos personales en Solution Systems se rige por los
+          principios de <strong>legalidad, finalidad, libertad, veracidad o calidad,
+          transparencia, acceso y circulación restringida, seguridad y
+          confidencialidad</strong>, en los términos del artículo 4 de la Ley 1581
+          de 2012.
+        </p>
+
+        <h2>6. Datos personales que recolectamos</h2>
+        <p>
+          Dependiendo de la relación con el Titular, Solution Systems puede
+          recolectar:
+        </p>
+        <h3>6.1. Datos de identificación y contacto</h3>
+        <p>
+          Nombres y apellidos, tipo y número de documento de identidad, cargo,
+          empresa o entidad, correo electrónico corporativo, teléfono fijo y móvil,
+          ciudad y dirección de correspondencia.
+        </p>
+        <h3>6.2. Datos de interacción digital</h3>
+        <p>
+          Dirección IP, tipo de navegador y dispositivo, sistema operativo, páginas
+          visitadas, tiempo de permanencia, origen de la visita e identificadores de
+          cookies.
+        </p>
+        <h3>6.3. Datos comerciales y contractuales</h3>
+        <p>
+          Información de facturación, historial de servicios contratados, tickets de
+          soporte, comunicaciones sostenidas y registros de capacitación.
+        </p>
+        <h3>6.4. Datos de aspirantes laborales</h3>
+        <p>
+          Hoja de vida, formación académica, experiencia laboral, referencias y
+          resultados de pruebas de selección.
+        </p>
+        <h3>6.5. Datos de colaboradores</h3>
+        <p>
+          Los necesarios para la ejecución del contrato laboral y el cumplimiento de
+          obligaciones legales en materia de seguridad social, tributaria y de
+          seguridad y salud en el trabajo.
+        </p>
+
+        <h2>7. Datos sensibles y datos de niñas, niños y adolescentes</h2>
+        <h3>7.1. Datos sensibles</h3>
+        <p>
+          Solution Systems no recolecta datos sensibles a través de su sitio web.
+          Cuando excepcionalmente se requieran (por ejemplo, datos de salud de
+          colaboradores o datos biométricos para control de acceso a instalaciones),
+          se informará al Titular que:
+        </p>
+        <ul>
+          <li>No está obligado a autorizar el tratamiento de datos sensibles.</li>
+          <li>No está obligado a responder preguntas sobre datos sensibles.</li>
+          <li>
+            Se le indicará cuáles de los datos solicitados tienen carácter sensible
+            y la finalidad específica de su tratamiento.
+          </li>
+        </ul>
+        <p>
+          Estos datos se tratarán únicamente con autorización explícita del Titular
+          y con medidas de seguridad reforzadas.
+        </p>
+        <h3>7.2. Menores de edad</h3>
+        <p>
+          El sitio web de Solution Systems no está dirigido a menores de edad y no
+          recolecta intencionalmente sus datos. Cuando por razones legales o
+          contractuales se requiera tratar datos de menores (por ejemplo,
+          beneficiarios de colaboradores), el tratamiento responderá al interés
+          superior del menor, respetará sus derechos fundamentales y contará con la
+          autorización del representante legal, previo ejercicio del derecho del
+          menor a ser escuchado.
+        </p>
+
+        <h2>8. Finalidades del tratamiento</h2>
+        <p>
+          Solution Systems trata los datos personales para las siguientes
+          finalidades:
+        </p>
+        <h3>8.1. Relación comercial y prestación de servicios</h3>
+        <ul>
+          <li>
+            Atender solicitudes de información, cotizaciones y demostraciones de
+            producto.
+          </li>
+          <li>
+            Formalizar, ejecutar y liquidar contratos de licenciamiento,
+            implementación, soporte y servicios en la nube.
+          </li>
+          <li>
+            Prestar servicios de mesa de ayuda y gestionar tickets, incidentes y
+            niveles de servicio (SLA).
+          </li>
+          <li>Gestionar facturación, cobranza y conciliación de cartera.</li>
+        </ul>
+        <h3>8.2. Comunicaciones y mercadeo</h3>
+        <ul>
+          <li>
+            Enviar información sobre productos, actualizaciones normativas, boletines,
+            eventos y capacitaciones.
+          </li>
+          <li>Realizar encuestas de satisfacción y estudios de mercado.</li>
+          <li>
+            Invitar a webinars, ruedas de negocio y actividades institucionales.
+          </li>
+        </ul>
+        <h3>8.3. Operación interna y cumplimiento</h3>
+        <ul>
+          <li>
+            Gestionar procesos de selección, contratación y administración de
+            personal.
+          </li>
+          <li>Gestionar la relación con proveedores y contratistas.</li>
+          <li>
+            Atender requerimientos de autoridades administrativas, judiciales o de
+            control.
+          </li>
+          <li>
+            Cumplir obligaciones en materia contable, tributaria y de prevención de
+            lavado de activos y financiación del terrorismo.
+          </li>
+        </ul>
+        <h3>8.4. Seguridad y mejora del sitio web</h3>
+        <ul>
+          <li>
+            Analizar el uso del sitio web para mejorar su contenido, rendimiento y
+            experiencia de usuario.
+          </li>
+          <li>Prevenir fraude, uso indebido y ataques automatizados.</li>
+          <li>
+            Garantizar la trazabilidad y seguridad de los sistemas de información.
+          </li>
+        </ul>
+        <h3>8.5. Tratamiento como Encargado</h3>
+        <p>
+          Cuando Solution Systems trata datos personales alojados en los sistemas de
+          sus clientes, lo hace exclusivamente conforme a las instrucciones del
+          cliente (Responsable), en el marco del contrato suscrito y bajo los
+          acuerdos de confidencialidad y transmisión de datos correspondientes.
+          Solution Systems no utiliza dicha información para finalidades propias.
+        </p>
+
+        <h2>9. Autorización del Titular</h2>
+        <h3>9.1. Forma de obtención</h3>
+        <p>
+          La autorización puede constar por escrito, de forma oral, o mediante
+          conductas inequívocas del Titular que permitan concluir razonablemente que
+          otorgó su consentimiento. En el sitio web, la autorización se obtiene
+          mediante la aceptación expresa de esta política al momento de diligenciar
+          cualquier formulario.
+        </p>
+        <h3>9.2. Prueba de la autorización</h3>
+        <p>
+          Solution Systems conserva evidencia de la autorización otorgada, incluyendo
+          registro de fecha, hora, dirección IP y versión de la política aceptada,
+          según corresponda.
+        </p>
+        <h3>9.3. Casos en que no se requiere autorización</h3>
+        <p>
+          De conformidad con el artículo 10 de la Ley 1581 de 2012, no será necesaria
+          la autorización cuando se trate de:
+        </p>
+        <ul>
+          <li>
+            Información requerida por una entidad pública o administrativa en
+            ejercicio de sus funciones legales, o por orden judicial.
+          </li>
+          <li>Datos de naturaleza pública.</li>
+          <li>Casos de urgencia médica o sanitaria.</li>
+          <li>
+            Tratamiento autorizado por la ley para fines históricos, estadísticos o
+            científicos.
+          </li>
+          <li>Datos relacionados con el Registro Civil de las personas.</li>
+        </ul>
+
+        <h2>10. Derechos de los Titulares</h2>
+        <p>
+          De acuerdo con el artículo 8 de la Ley 1581 de 2012, el Titular tiene
+          derecho a:
+        </p>
+        <ol>
+          <li>
+            <strong>Conocer, actualizar y rectificar</strong> sus datos personales
+            frente a Solution Systems. Este derecho puede ejercerse, entre otros,
+            frente a datos parciales, inexactos, incompletos, fraccionados, que
+            induzcan a error, o cuyo tratamiento esté prohibido o no autorizado.
+          </li>
+          <li>
+            <strong>Solicitar prueba de la autorización</strong> otorgada, salvo en
+            los casos en que la ley no la exige.
+          </li>
+          <li>
+            <strong>Ser informado</strong>, previa solicitud, sobre el uso que se ha
+            dado a sus datos personales.
+          </li>
+          <li>
+            <strong>Presentar quejas ante la Superintendencia de Industria y
+            Comercio</strong> por infracciones a la normativa, una vez agotado el
+            trámite de consulta o reclamo ante Solution Systems.
+          </li>
+          <li>
+            <strong>Revocar la autorización y/o solicitar la supresión</strong> del
+            dato, cuando la SIC haya determinado que en el tratamiento se incurrió en
+            conductas contrarias a la ley o a la Constitución, o cuando no exista un
+            deber legal o contractual que impida su eliminación.
+          </li>
+          <li>
+            <strong>Acceder de forma gratuita</strong> a sus datos personales que
+            hayan sido objeto de tratamiento.
+          </li>
+        </ol>
+        <p>
+          <strong>Legitimación para el ejercicio de derechos.</strong> Podrán ejercer
+          estos derechos el Titular (acreditando su identidad), sus causahabientes
+          (acreditando tal calidad), el representante o apoderado del Titular, y
+          quien actúe por estipulación a favor de otro.
+        </p>
+
+        <h2>11. Área responsable de la atención de peticiones, consultas y reclamos</h2>
+        <p>
+          El área encargada de atender las solicitudes de los Titulares es:
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">Área</th>
+              <td>
+                {
+                  org.area ?? (
+                    <span class="ss-tbd">
+                      [Oficial de Protección de Datos / Dirección Administrativa]
+                    </span>
+                  )
+                }
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Correo electrónico</th>
+              <td>
+                {
+                  org.emailDatos ? (
+                    <a href={`mailto:${org.emailDatos}`}>{org.emailDatos}</a>
+                  ) : (
+                    <span class="ss-tbd">[protecciondedatos@dominio.com]</span>
+                  )
+                }
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Teléfono</th>
+              <td>{org.telefono}</td>
+            </tr>
+            <tr>
+              <th scope="row">Dirección física</th>
+              <td>{org.domicilio}</td>
+            </tr>
+            <tr>
+              <th scope="row">Horario de atención</th>
+              <td>
+                {
+                  org.horario ?? (
+                    <span class="ss-tbd">[Lunes a viernes, 8:00 a.m. a 5:00 p.m.]</span>
+                  )
+                }
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Formulario web</th>
+              <td>
+                {
+                  org.formularioDerechos ?? (
+                    <span class="ss-tbd">[https://www.dominio.com/proteccion-de-datos]</span>
+                  )
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>12. Procedimiento para ejercer los derechos</h2>
+        <h3>12.1. Consultas</h3>
+        <p>
+          El Titular puede consultar la información personal que repose en las bases
+          de datos de Solution Systems a través de los canales indicados en el
+          numeral 11.
+        </p>
+        <ul>
+          <li>
+            La consulta será atendida en un término máximo de <strong>diez (10) días
+            hábiles</strong> contados desde su recepción.
+          </li>
+          <li>
+            Cuando no sea posible atenderla dentro de ese plazo, se informará al
+            interesado antes del vencimiento, expresando los motivos y la fecha en
+            que se atenderá, la cual en ningún caso superará los <strong>cinco (5)
+            días hábiles</strong> siguientes al vencimiento del primer término.
+          </li>
+        </ul>
+        <h3>12.2. Reclamos</h3>
+        <p>
+          El Titular que considere que la información contenida en una base de datos
+          debe ser objeto de corrección, actualización o supresión, o que advierta un
+          presunto incumplimiento de la normativa, podrá presentar un reclamo que
+          será tramitado así:
+        </p>
+        <p><strong>Contenido del reclamo:</strong></p>
+        <ul>
+          <li>Identificación del Titular.</li>
+          <li>Descripción de los hechos que dan lugar al reclamo.</li>
+          <li>Dirección física o electrónica de notificación.</li>
+          <li>Documentos que se quiera hacer valer.</li>
+        </ul>
+        <p><strong>Trámite:</strong></p>
+        <ol>
+          <li>
+            Si el reclamo está incompleto, se requerirá al interesado dentro de los
+            <strong>cinco (5) días</strong> siguientes a su recepción para que subsane
+            las fallas. Transcurridos <strong>dos (2) meses</strong> sin que presente
+            la información requerida, se entenderá que desistió del reclamo.
+          </li>
+          <li>
+            Si Solution Systems no es competente para resolverlo, dará traslado a
+            quien corresponda en un término máximo de <strong>dos (2) días
+            hábiles</strong>, e informará de esta situación al interesado.
+          </li>
+          <li>
+            Una vez recibido el reclamo completo, se incluirá en la base de datos la
+            leyenda <strong>«reclamo en trámite»</strong> y el motivo del mismo, en un
+            término no mayor a <strong>dos (2) días hábiles</strong>. Dicha leyenda se
+            mantendrá hasta que el reclamo sea decidido.
+          </li>
+          <li>
+            El término máximo para atender el reclamo será de <strong>quince (15) días
+            hábiles</strong> contados a partir del día siguiente a su recepción.
+            Cuando no sea posible atenderlo dentro de dicho término, se informarán los
+            motivos y la fecha de respuesta, que no podrá superar los <strong>ocho (8)
+            días hábiles</strong> siguientes al vencimiento del primer término.
+          </li>
+        </ol>
+        <h3>12.3. Requisito de procedibilidad</h3>
+        <p>
+          El Titular solo podrá elevar queja ante la Superintendencia de Industria y
+          Comercio una vez haya agotado el trámite de consulta o reclamo ante Solution
+          Systems.
+        </p>
+        <h3>12.4. Revocatoria de la autorización y supresión del dato</h3>
+        <p>
+          El Titular puede solicitar en cualquier momento la revocatoria de la
+          autorización y/o la supresión de sus datos. La solicitud no procederá cuando
+          el Titular tenga un deber legal o contractual de permanecer en la base de
+          datos, o cuando la eliminación impida el cumplimiento de una obligación
+          legal a cargo de Solution Systems.
+        </p>
+        <p>
+          La revocatoria puede ser <strong>total</strong> (sobre todas las finalidades)
+          o <strong>parcial</strong> (sobre finalidades específicas, como el envío de
+          comunicaciones comerciales).
+        </p>
+
+        <h2>13. Seguridad de la información</h2>
+        <p>
+          Solution Systems implementa medidas técnicas, humanas y administrativas
+          razonables y proporcionales para proteger los datos personales contra
+          adulteración, pérdida, consulta, uso o acceso no autorizado o fraudulento,
+          entre ellas:
+        </p>
+        <ul>
+          <li>
+            Cifrado de datos en tránsito mediante TLS y encabezados de seguridad en el
+            sitio web (HSTS, CSP, X-Frame-Options, entre otros).
+          </li>
+          <li>Control de acceso basado en roles y principio de mínimo privilegio.</li>
+          <li>
+            Políticas de contraseñas y autenticación reforzada para sistemas críticos.
+          </li>
+          <li>Registro y monitoreo de eventos de seguridad.</li>
+          <li>Copias de respaldo y planes de continuidad.</li>
+          <li>
+            Acuerdos de confidencialidad con colaboradores, contratistas y Encargados.
+          </li>
+          <li>
+            Capacitación periódica en protección de datos y seguridad de la
+            información.
+          </li>
+        </ul>
+        <p>
+          Ninguna medida de seguridad es infalible. En caso de incidentes que afecten
+          la seguridad de las bases de datos, Solution Systems los reportará a la
+          Superintendencia de Industria y Comercio conforme a la normativa vigente y
+          notificará a los Titulares afectados cuando corresponda.
+        </p>
+
+        <h2>14. Transmisión y transferencia de datos</h2>
+        <p>Solution Systems puede transmitir o transferir datos personales a:</p>
+        <ul>
+          <li>
+            <strong>Encargados y proveedores tecnológicos</strong> que prestan
+            servicios de alojamiento, correo electrónico, analítica web, mensajería y
+            soporte, bajo contratos que garantizan el cumplimiento de los deberes de
+            esta política.
+          </li>
+          <li>
+            <strong>Entidades del grupo empresarial o aliados comerciales</strong>,
+            cuando sea necesario para la prestación del servicio y medie autorización
+            del Titular.
+          </li>
+          <li>
+            <strong>Autoridades públicas</strong>, en cumplimiento de requerimientos
+            legales, administrativos o judiciales.
+          </li>
+        </ul>
+        <p>
+          <strong>Transferencia internacional.</strong> Algunos proveedores
+          tecnológicos utilizados por Solution Systems se encuentran ubicados fuera de
+          Colombia (entre ellos, servicios de infraestructura en la nube, analítica
+          web y protección contra bots, con operación en Estados Unidos y la Unión
+          Europea). Al aceptar esta política, el Titular autoriza dichas
+          transferencias, las cuales se realizan hacia países que otorgan un nivel
+          adecuado de protección o mediante instrumentos contractuales que garantizan
+          estándares equivalentes a los previstos en la ley colombiana, conforme a la
+          Circular Externa 005 de 2017 de la SIC.
+        </p>
+
+        <h2>15. Cookies y tecnologías similares</h2>
+        <p>
+          El sitio web de Solution Systems utiliza cookies y tecnologías similares
+          para su funcionamiento y para el análisis de su uso:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Tipo</th>
+              <th scope="col">Finalidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Necesarias</th>
+              <td>
+                Permiten el funcionamiento básico del sitio, la seguridad de los
+                formularios y la prevención de envíos automatizados. No pueden
+                desactivarse.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Analíticas</th>
+              <td>
+                Permiten medir el tráfico y comprender cómo se navega el sitio, con el
+                fin de mejorarlo. Se implementan mediante herramientas de analítica web.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Funcionales</th>
+              <td>
+                Recuerdan preferencias del usuario, como idioma o configuración de
+                visualización.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">De mercadeo</th>
+              <td>
+                Permiten medir la efectividad de campañas y mostrar contenido
+                relevante. Solo se activan con consentimiento previo.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          El Titular puede aceptar, rechazar o configurar el uso de cookies no
+          esenciales a través del banner de consentimiento del sitio web, y puede
+          eliminarlas o bloquearlas desde la configuración de su navegador. La
+          desactivación de ciertas cookies puede afectar el funcionamiento de algunas
+          secciones del sitio.
+        </p>
+
+        <h2>16. Vigencia de las bases de datos y conservación</h2>
+        <p>
+          Los datos personales serán conservados durante el tiempo que sea razonable y
+          necesario para cumplir las finalidades que justificaron su tratamiento,
+          atendiendo a:
+        </p>
+        <ul>
+          <li>
+            La duración de la relación comercial, laboral o contractual y sus términos
+            de prescripción.
+          </li>
+          <li>
+            Las obligaciones legales de conservación en materia contable, tributaria,
+            laboral y de cumplimiento normativo (que en algunos casos alcanzan
+            <strong>diez (10) años</strong> o más).
+          </li>
+          <li>Las disposiciones sobre gestión documental aplicables.</li>
+        </ul>
+        <p>
+          Cumplido el término y agotadas las finalidades, los datos serán suprimidos
+          de forma segura o sometidos a procesos de anonimización.
+        </p>
+        <p>
+          Las bases de datos de Solution Systems tendrán una vigencia indefinida
+          mientras se mantengan las finalidades descritas y no medie solicitud de
+          supresión procedente.
+        </p>
+
+        <h2>17. Registro Nacional de Bases de Datos</h2>
+        <p>
+          Cuando Solution Systems se encuentre obligada en los términos del Decreto
+          1074 de 2015 y del Decreto 090 de 2018, sus bases de datos serán inscritas y
+          actualizadas en el <strong>Registro Nacional de Bases de Datos (RNBD)</strong>
+          administrado por la Superintendencia de Industria y Comercio.
+        </p>
+
+        <h2>18. Modificaciones a la política</h2>
+        <p>
+          Solution Systems se reserva el derecho de modificar esta política en
+          cualquier momento. Todo cambio sustancial será comunicado a los Titulares a
+          través del sitio web y, cuando corresponda, por correo electrónico, con una
+          antelación razonable a su entrada en vigencia. Se recomienda revisar
+          periódicamente este documento.
+        </p>
+
+        <h2>19. Aceptación</h2>
+        <p>
+          Al utilizar el sitio web de Solution Systems, diligenciar sus formularios o
+          suministrar datos personales por cualquier canal, el Titular declara haber
+          leído, entendido y aceptado los términos de esta Política de Privacidad y
+          Tratamiento de Datos Personales.
+        </p>
+
+        <h2>20. Vigencia</h2>
+        <p>
+          La presente política entra en vigencia a partir del <span class="ss-tbd"
+            >[DD] de [MES] de [AAAA]</span
+          > y permanecerá vigente hasta que sea modificada o sustituida por una versión
+          posterior.
+        </p>
+      </article>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Prosa del documento legal (§5.2): estilos co-localizados bajo `.ss-legal`
+     para no repetir clases en decenas de elementos. Colores desde tokens. */
+  .ss-legal {
+    color: var(--color-ink-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+  }
+
+  .ss-legal h1 {
+    color: var(--color-ink);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+  }
+
+  .ss-legal-org {
+    color: var(--color-brand);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+
+  .ss-legal-meta {
+    display: grid;
+    gap: 0.5rem 2rem;
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-surface);
+    font-size: 0.875rem;
+  }
+  .ss-legal-meta dt {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .ss-legal-meta dd {
+    margin: 0;
+  }
+
+  .ss-legal h2 {
+    color: var(--color-ink);
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.03em;
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ss-legal h3 {
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ss-legal p {
+    margin-top: 0.9rem;
+  }
+
+  .ss-legal strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .ss-legal a {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ss-legal ul,
+  .ss-legal ol {
+    margin-top: 0.9rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .ss-legal ul {
+    list-style: disc;
+  }
+  .ss-legal ol {
+    list-style: decimal;
+  }
+  .ss-legal li {
+    padding-left: 0.25rem;
+  }
+
+  .ss-legal hr {
+    margin: 3rem 0;
+    border: 0;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .ss-legal blockquote {
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-left: 3px solid var(--color-brand);
+    background-color: var(--color-surface-muted);
+    border-radius: 0 var(--radius-surface) var(--radius-surface) 0;
+  }
+
+  .ss-legal table {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .ss-legal th,
+  .ss-legal td {
+    border: 1px solid var(--color-hairline);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .ss-legal thead th {
+    background-color: var(--color-surface-muted);
+    color: var(--color-ink);
+  }
+  .ss-legal tbody th {
+    color: var(--color-ink);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Marca visible para los campos pendientes de completar (Anexo D). */
+  .ss-tbd {
+    background-color: color-mix(in srgb, var(--color-critical) 12%, transparent);
+    color: var(--color-critical);
+    padding: 0 0.25rem;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  /* En móvil las tablas de dos columnas se desplazan si no caben. */
+  @media (width < 40rem) {
+    .ss-legal table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>

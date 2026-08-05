@@ -1,4 +1,5 @@
 import type { FooterColumn, HeaderActions, NavItem } from "@/types";
+import { siteConfig } from "@config/site";
 
 export interface Product {
   name: string;
@@ -39,13 +40,20 @@ export const mainNav: NavItem[] = [
     dropdown: productLinks,
   },
   { label: "Soluciones", href: "/soluciones" },
-  // TODO: confirmar con Juan — la página /recursos no existe todavía y su
-  // desplegable tampoco está diseñado en Figma.
-  { label: "Recursos", href: "/recursos", hasDropdown: true },
+  {
+    label: "Recursos",
+    href: "/contacto",
+    hasDropdown: true,
+    dropdown: [
+      { label: "Blog", href: "/blog" },
+      { label: "Contacto", href: "/contacto" },
+    ],
+  },
 ];
 
 export const headerActions: HeaderActions = {
-  secondary: { label: "Soporte", href: "/soporte" },
+  // "Soporte" abre el portal de Mesa de Ayuda (externo).
+  secondary: { label: "Soporte", href: siteConfig.supportUrl || "/soporte" },
   // TODO: confirmar con Juan — destino de "Empezar ahora"; se asume /contacto.
   primary: { label: "Empezar ahora", href: "/contacto" },
 };
@@ -67,16 +75,16 @@ export const footerColumns: FooterColumn[] = [
       { label: "Soluciones en la nube", href: "/soluciones" },
       { label: "SaaS", href: "/soluciones" },
       { label: "IaaS", href: "/soluciones" },
-      { label: "Mesa de ayuda", href: "/soporte" },
+      { label: "Mesa de ayuda", href: siteConfig.supportUrl || "/soporte" },
     ],
   },
   {
     title: "Recursos",
-    // TODO: confirmar con Juan — páginas de Blog, Clientes y Política de privacidad.
+    // TODO: confirmar con Juan — páginas de Clientes.
     links: [
-      { label: "Blog" },
+      { label: "Blog", href: "/blog" },
       { label: "Clientes" },
-      { label: "Política de privacidad" },
+      { label: "Política de privacidad", href: "/politica-de-privacidad" },
     ],
   },
 ];
