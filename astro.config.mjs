@@ -13,5 +13,11 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // Permite abrir el server de desarrollo a través de un túnel (VS Code Port
+    // Forwarding o SSH tipo localhost.run). Solo afecta a `astro dev`, no a
+    // producción.
+    server: {
+      allowedHosts: [".devtunnels.ms", ".lhr.life", ".localhost.run"],
+    },
   },
 });

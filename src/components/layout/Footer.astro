@@ -1,19 +1,246 @@
 ---
-import { footerNav } from "@config/navigation";
+import { Image } from "astro:assets";
+
+import Container from "./Container.astro";
+import Button from "@components/ui/Button.astro";
+import { footerColumns } from "@config/navigation";
 import { siteConfig } from "@config/site";
+
+const year = new Date().getFullYear();
+const { phone, email } = siteConfig.contact;
+const telHref = `tel:${phone.replace(/\s+/g, "")}`;
+
+/*
+  Assets de marca resueltos por slug: al soltar `logo`, `linkedin` o `instagram`
+  (png/jpg/webp/svg) en src/assets/images/footer/, la imagen aparece sola y el
+  placeholder desaparece (mismo patrón que ServiceCards/ClientLogos).
+*/
+const brandAssets = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/footer/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
+const assetBySlug = new Map(
+  Object.entries(brandAssets).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+const logoImage = assetBySlug.get("logo");
+// Wordmark "Solution Systems" (imagen, no texto): src/assets/images/footer/wordmark.*
+const wordmarkImage = assetBySlug.get("wordmark");
+
+// URLs por confirmar; los íconos usan `abbr` en el placeholder mientras no exista el asset.
+// TODO: confirmar con Juan — URLs de redes sociales.
+const socials = [
+  { name: "LinkedIn", slug: "linkedin", abbr: "in", href: siteConfig.social.linkedin },
+  { name: "Instagram", slug: "instagram", abbr: "ig", href: siteConfig.social.instagram },
+];
+
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+const linkClass = `rounded-xs text-[1rem] leading-[1.3] tracking-[-0.04em] text-white/90 transition-colors hover:text-white ${focusRing}`;
+const headingClass =
+  "text-[1.125rem] leading-[1.3] font-semibold tracking-[-0.04em] text-white";
+
+// Caja placeholder para assets aún no entregados (símbolo del logo e íconos).
+const placeholder =
+  "flex items-center justify-center rounded border border-dashed border-white/40 text-[0.5rem] font-medium uppercase tracking-tight text-white/50";
 ---
 
-<footer>
-  <p>{siteConfig.name}</p>
-  <nav>
-    <ul>
-      {
-        footerNav.map((item) => (
-          <li>
-            <a href={item.href}>{item.label}</a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
+<footer class="bg-ink text-white">
+  <Container class="py-16 lg:py-[58px]">
+    <div class="flex flex-col gap-12 lg:flex-row lg:justify-between lg:gap-8">
+      <!-- Columna de marca -->
+      <div class="lg:max-w-[305px]">
+        <a
+          href="/"
+          class:list={[
+            "rounded-control inline-flex items-center gap-2 focus-visible:outline-offset-4",
+            focusRing,
+          ]}
+        >
+          {
+            logoImage ? (
+              // Símbolo del logo (versión para fondo oscuro): src/assets/images/footer/logo.*
+              <Image
+                src={logoImage}
+                alt=""
+                class="h-9 w-auto shrink-0 object-contain"
+              />
+            ) : (
+              <span
+                class:list={[placeholder, "size-9 shrink-0"]}
+                aria-hidden="true"
+              >
+                logo
+              </span>
+            )
+          }
+          {
+            wordmarkImage ? (
+              // Wordmark "Solution Systems" a la misma altura que el símbolo del logo.
+              <Image
+                src={wordmarkImage}
+                alt={siteConfig.name}
+                class="h-9 w-auto shrink-0 object-contain"
+              />
+            ) : (
+              // Placeholder a la misma altura que el símbolo del logo (h-9), ~ancho del wordmark.
+              <span
+                class:list={[placeholder, "h-9 w-[188px] shrink-0"]}
+                aria-label={siteConfig.name}
+              >
+                {siteConfig.name}
+              </span>
+            )
+          }
+        </a>
+
+        <p
+          class="mt-6 max-w-[305px] text-[1rem] leading-[1.3] tracking-[-0.04em] text-white"
+        >
+          Soluciones tecnológicas para el sector financiero: infraestructura en
+          la nube, gestión de riesgo y soporte especializado, con más de 25 años
+          de experiencia.{" "}
+          {/* TODO: confirmar con Juan — destino de "Únase al equipo". */}
+          <a
+            href="/contacto"
+            class:list={[
+              "text-brand rounded-xs underline underline-offset-2 transition-[filter] hover:brightness-125",
+              focusRing,
+            ]}
+          >
+            Únase al equipo.
+          </a>
+        </p>
+
+        <div class="mt-8 flex items-center gap-4">
+          <ul class="flex items-center gap-2" aria-label="Redes sociales">
+            {
+              socials.map((social) => {
+                const icon = assetBySlug.get(social.slug);
+                const media = icon ? (
+                  <Image src={icon} alt="" class="size-6 object-contain" />
+                ) : (
+                  <span class:list={[placeholder, "size-6"]} aria-hidden="true">
+                    {social.abbr}
+                  </span>
+                );
+
+                return (
+                  <li>
+                    {social.href ? (
+                      <a
+                        href={social.href}
+                        aria-label={social.name}
+                        class:list={[
+                          "ss-tap-target rounded-xs inline-flex",
+                          focusRing,
+                        ]}
+                      >
+                        {media}
+                      </a>
+                    ) : (
+                      <span role="img" aria-label={social.name}>
+                        {media}
+                      </span>
+                    )}
+                  </li>
+                );
+              })
+            }
+          </ul>
+
+          <Button
+            variant="inverse"
+            size="sm"
+            href={siteConfig.supportUrl || "/soporte"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Mesa de ayuda
+          </Button>
+        </div>
+      </div>
+
+      <!-- Columnas de enlaces -->
+      <nav
+        class="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:flex lg:gap-16"
+        aria-label="Enlaces del pie de página"
+      >
+        {
+          footerColumns.map((col, index) => (
+            <div class:list={[index === footerColumns.length - 1 && "flex flex-col gap-6"]}>
+              <div>
+                <h2 class={headingClass}>
+                  {col.titleHref ? (
+                    <a
+                      href={col.titleHref}
+                      class:list={[
+                        "rounded-xs transition-colors hover:text-white/80",
+                        focusRing,
+                      ]}
+                    >
+                      {col.title}
+                    </a>
+                  ) : (
+                    col.title
+                  )}
+                </h2>
+
+                <ul class="mt-5 flex flex-col gap-1">
+                  {col.links.map((link) => (
+                    <li>
+                      {link.href ? (
+                        <a
+                          href={link.href}
+                          class={linkClass}
+                          {...(link.href.startsWith("http")
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <span class="text-[1rem] leading-[1.3] tracking-[-0.04em] text-white/90">
+                          {link.label}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {index === footerColumns.length - 1 && (
+                <div>
+                  <h2 class={headingClass}>Contacto</h2>
+                  <ul class="mt-5 flex flex-col gap-1">
+                    <li>
+                      <a href={telHref} class={linkClass}>
+                        {phone}
+                      </a>
+                    </li>
+                    <li>
+                      <a href={`mailto:${email}`} class={linkClass}>
+                        {email}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <p
+      class="mt-14 text-center text-[0.875rem] leading-[1.4] tracking-[-0.04em] text-white/70 lg:mt-[70px]"
+    >
+      © {year} {siteConfig.name}. Todos los derechos reservados.
+    </p>
+  </Container>
 </footer>

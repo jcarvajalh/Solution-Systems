@@ -1,8 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-/** Solo las variantes que existen en Figma. */
-type Variant = "primary" | "secondary";
+/** Solo las variantes que existen en Figma. `inverse` = botón blanco sobre
+ *  superficie de marca (CTA banner). */
+type Variant = "primary" | "secondary" | "inverse";
 /**
  * `sm` = header (28px) y `md` = hero (36px), ambos de Figma.
  * `touch` no está en el diseño: es el tamaño del menú compacto, donde el área
@@ -29,11 +30,13 @@ const {
 const Tag = href ? "a" : "button";
 
 const base =
-  "inline-flex items-center justify-center rounded-control text-action font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+  "inline-flex items-center justify-center rounded-control text-action font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand text-white hover:brightness-110",
-  secondary: "border border-brand text-brand hover:bg-brand hover:text-white",
+  primary: "bg-brand text-white hover:brightness-110 focus-visible:outline-brand",
+  secondary:
+    "border border-brand text-brand hover:bg-brand hover:text-white focus-visible:outline-brand",
+  inverse: "bg-white text-brand hover:bg-white/90 focus-visible:outline-white",
 };
 
 const sizes: Record<Size, string> = {

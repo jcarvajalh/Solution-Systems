@@ -17,7 +17,10 @@ const focusRing =
 const navLink = ["text-nav font-medium transition-colors", focusRing];
 ---
 
-<header class="bg-white">
+<header
+  id="ss-header"
+  class="bg-white sticky top-0 z-40 transition-transform duration-200 ease-out will-change-transform motion-reduce:transition-none"
+>
   <Container class="flex h-[var(--header-height)] items-center">
     <a
       href="/"
@@ -36,10 +39,11 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
       <ul class="flex items-center gap-10">
         {
           mainNav.map((item) => (
-            <li>
+            <li class:list={["relative", item.dropdown && "group"]}>
               <a
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
+                aria-haspopup={item.dropdown ? "true" : undefined}
                 class:list={[
                   "ss-tap-target inline-flex items-center gap-1",
                   navLink,
@@ -52,11 +56,31 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
                 {item.hasDropdown && (
                   <Icon
                     name="lucide:chevron-down"
-                    class="size-4"
+                    class="size-4 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180 motion-reduce:transition-none"
                     aria-hidden="true"
                   />
                 )}
               </a>
+
+              {item.dropdown && (
+                <div class="invisible absolute top-full left-0 z-50 pt-3 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 motion-reduce:transition-none">
+                  <ul class="border-hairline rounded-control w-64 border bg-white p-2 shadow-lg shadow-black/5">
+                    {item.dropdown.map((sub) => (
+                      <li>
+                        <a
+                          href={sub.href}
+                          class:list={[
+                            "text-nav text-ink hover:bg-surface-muted hover:text-brand block rounded-md px-3 py-2 font-medium transition-colors",
+                            focusRing,
+                          ]}
+                        >
+                          {sub.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </li>
           ))
         }
@@ -64,7 +88,13 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
     </nav>
 
     <div class="nav:flex ml-auto hidden items-center gap-2.5">
-      <Button variant="secondary" size="sm" href={headerActions.secondary.href}>
+      <Button
+        variant="secondary"
+        size="sm"
+        href={headerActions.secondary.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {headerActions.secondary.label}
       </Button>
       <Button variant="primary" size="sm" href={headerActions.primary.href}>
@@ -127,6 +157,24 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
                     />
                   )}
                 </a>
+
+                {item.dropdown && (
+                  <ul class="border-ink/10 mb-2 flex flex-col border-l pl-4">
+                    {item.dropdown.map((sub) => (
+                      <li>
+                        <a
+                          href={sub.href}
+                          class:list={[
+                            "text-nav text-ink-secondary hover:text-brand flex h-10 items-center font-medium",
+                            focusRing,
+                          ]}
+                        >
+                          {sub.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))
           }
@@ -138,6 +186,8 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
           variant="secondary"
           size="touch"
           href={headerActions.secondary.href}
+          target="_blank"
+          rel="noopener noreferrer"
           class="flex-1"
         >
           {headerActions.secondary.label}
@@ -188,5 +238,39 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
     desktop.addEventListener("change", (event) => {
       if (event.matches) setOpen(false);
     });
+  }
+
+  // Auto-ocultar el header al bajar y mostrarlo al subir (transición rápida).
+  const header = document.getElementById("ss-header");
+  if (header) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const DELTA = 6; // ignora micro-scrolls para que no parpadee
+
+    const update = () => {
+      ticking = false;
+      const y = Math.max(window.scrollY, 0);
+      // Con el menú móvil abierto el header siempre queda visible.
+      const menuOpen = panel && !panel.hidden;
+      if (Math.abs(y - lastY) < DELTA && y > header.offsetHeight) return;
+
+      if (y > lastY && !menuOpen && y > header.offsetHeight) {
+        header.classList.add("-translate-y-full"); // bajando: ocultar
+      } else {
+        header.classList.remove("-translate-y-full"); // subiendo: mostrar
+      }
+      lastY = y;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
   }
 </script>

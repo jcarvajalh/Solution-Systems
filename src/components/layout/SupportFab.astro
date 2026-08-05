@@ -1,0 +1,30 @@
+---
+import { Image } from "astro:assets";
+import iconMesaAyuda from "@assets/images/icon-mesa-ayuda.png";
+import { siteConfig } from "@config/site";
+
+/*
+  Botón flotante de Mesa de Ayuda: fijo abajo a la derecha y visible en todas
+  las páginas (se monta en BaseLayout). Abre una página externa en otra pestaña.
+  El destino se toma de `siteConfig.supportUrl`; mientras sea "" se usa "#" como
+  placeholder (ver TODO en site.ts).
+*/
+const supportUrl = siteConfig.supportUrl?.trim() || "#";
+---
+
+<a
+  href={supportUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Abrir Mesa de Ayuda"
+  class="bg-brand fixed right-6 bottom-6 z-50 flex size-14 items-center justify-center rounded-full shadow-lg ring-1 ring-black/5 transition-transform duration-200 ease-out hover:scale-105 focus-visible:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none motion-reduce:hover:scale-100"
+>
+  <Image
+    src={iconMesaAyuda}
+    alt=""
+    width={28}
+    height={28}
+    loading="eager"
+    class="size-7 object-contain"
+  />
+</a>

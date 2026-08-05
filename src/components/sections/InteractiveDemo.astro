@@ -2,7 +2,7 @@
 import { getImage } from "astro:assets";
 
 import { InteractiveApp } from "@features/interactive-app";
-import appBackdrop from "@assets/images/app-backdrop.jpg";
+import appBackdrop from "@assets/images/app-backdrop.png";
 
 // Se optimiza aquí porque `<Image>` es un componente de Astro y no puede
 // renderizarse dentro de la isla de React.
@@ -13,7 +13,7 @@ const backdrop = await getImage({
 });
 ---
 
-<section class="bg-surface-muted pt-6 pb-3.5">
+<section class="bg-surface-muted pt-6">
   <h2 class="sr-only">Recorre los módulos de la plataforma</h2>
   <InteractiveApp backdropSrc={backdrop.src} client:visible />
 </section>

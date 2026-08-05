@@ -1,25 +1,25 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import ProductShowcase from "@components/sections/ProductShowcase.astro";
+import { products } from "@config/navigation";
 
-export async function getStaticPaths() {
-  const products = await getCollection("products");
-
+export function getStaticPaths() {
   return products.map((product) => ({
-    params: { slug: product.data.slug },
+    params: { slug: product.slug },
     props: { product },
   }));
 }
 
 export interface Props {
-  product: CollectionEntry<"products">;
+  product: (typeof products)[number];
 }
 
 const { product } = Astro.props;
-
-// TODO: PageHeader, ProductTabs, FeatureRow
 ---
 
-<BaseLayout title={product.data.name}>
-  <p>{product.data.description}</p>
+<BaseLayout
+  title={product.name}
+  description={`${product.name}: solución tecnológica de Solution Systems para el sector financiero.`}
+>
+  <ProductShowcase productName={product.name} />
 </BaseLayout>

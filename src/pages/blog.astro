@@ -1,0 +1,104 @@
+---
+import { Icon } from "astro-icon/components";
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Container from "@components/layout/Container.astro";
+import CTABanner from "@components/sections/CTABanner.astro";
+import { siteConfig } from "@config/site";
+
+/*
+  Blog — andamiaje. Aún no hay diseño ni contenido: se reutiliza el lenguaje
+  visual del resto del sitio (marco con rieles + hairlines, tokens, tipografía
+  Geist). Las tarjetas son placeholders "esqueleto" (no se inventan artículos,
+  §12.1) y se marcan `aria-hidden`; el estado real se anuncia en el subtítulo.
+  TODO: confirmar con Juan — Content Collection `blog`, plantilla de artículo y
+  ruta `/blog/[slug]`.
+*/
+
+const description =
+  "Artículos sobre software financiero, gestión de riesgo LA/FT y cumplimiento normativo. En construcción.";
+
+// Número de tarjetas de muestra para previsualizar la rejilla.
+const placeholders = Array.from({ length: 6 });
+
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: `Blog | ${siteConfig.name}`,
+  description,
+  url: `${siteConfig.url}/blog`,
+};
+---
+
+<BaseLayout title="Blog" description={description}>
+  <section class="ss-rails border-y border-black/20 bg-white">
+    {/* Franja superior del marco. */}
+    <div class="h-[53px] border-b border-black/20"></div>
+
+    <Container class="py-14 lg:py-20">
+      {/* Encabezado */}
+      <div class="mx-auto max-w-[820px] text-center">
+        <h1 class="text-display text-ink font-semibold">Blog</h1>
+
+        <p
+          class="text-lead text-ink-secondary mx-auto mt-4 max-w-[640px] font-medium"
+        >
+          Estamos preparando artículos sobre software financiero, gestión de
+          riesgo LA/FT y cumplimiento normativo. Pronto encontrarás contenido
+          aquí.
+        </p>
+      </div>
+
+      {/* Aún sin artículos: el mensaje real va arriba; la rejilla es una vista
+          previa decorativa del diseño. */}
+      <p class="sr-only">Aún no hay artículos publicados.</p>
+
+      <ul
+        role="list"
+        aria-hidden="true"
+        class="mx-auto mt-14 grid max-w-[1064px] gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {
+          placeholders.map(() => (
+            <li>
+              <article class="rounded-control flex h-full flex-col overflow-hidden border border-black/20 bg-white">
+                {/* Imagen (placeholder) */}
+                <div class="bg-surface-muted text-ink-secondary/40 flex aspect-video items-center justify-center border-b border-black/10">
+                  <Icon name="lucide:image" class="size-8" />
+                </div>
+
+                <div class="flex flex-1 flex-col gap-3 p-5">
+                  <span class="bg-brand/10 text-brand w-fit rounded-full px-3 py-1 text-xs font-semibold tracking-[-0.02em]">
+                    Próximamente
+                  </span>
+
+                  {/* Título y resumen (esqueleto) */}
+                  <div class="bg-hairline h-4 w-4/5 rounded" />
+                  <div class="space-y-2">
+                    <div class="bg-hairline h-3 w-full rounded" />
+                    <div class="bg-hairline h-3 w-11/12 rounded" />
+                    <div class="bg-hairline h-3 w-3/4 rounded" />
+                  </div>
+
+                  {/* Meta (esqueleto) */}
+                  <div class="mt-auto flex items-center gap-2 pt-2">
+                    <div class="bg-hairline size-6 rounded-full" />
+                    <div class="bg-hairline h-3 w-24 rounded" />
+                  </div>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <CTABanner />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(blogSchema)}
+    is:inline
+  />
+</BaseLayout>

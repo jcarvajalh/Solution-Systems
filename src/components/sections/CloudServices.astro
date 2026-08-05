@@ -1,0 +1,272 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+import Container from "@components/layout/Container.astro";
+import Button from "@components/ui/Button.astro";
+import ArchitectureDiagram from "@components/sections/ArchitectureDiagram.astro";
+import { headerActions } from "@config/navigation";
+
+/*
+  Ilustraciones por nombre de archivo en src/assets/images/solutions/ (patrón
+  glob, igual que ServiceCards). Si falta el archivo, se pinta el placeholder.
+*/
+const illustrations = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/solutions/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
+const illustrationBySlug = new Map(
+  Object.entries(illustrations).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+
+/*
+  Sección "Servicios en la nube" (Figma, Frame 38/39). El diseño enmarca el
+  contenido con una retícula de líneas: rieles verticales (`ss-rails`) + líneas
+  horizontales de ancho completo que separan una franja superior, la intro, la
+  banda de tarjetas y el diagrama. Las líneas horizontales se logran con `border`
+  en tiras de ancho completo (rgba(0,0,0,0.2) = `border-black/20`).
+  Fondo #F7F7F7 = token `surface-muted`.
+*/
+
+const cards = [
+  {
+    slug: "aws",
+    alt: "Amazon Web Services",
+    description:
+      "Infraestructura cloud escalable que garantiza disponibilidad y continuidad operativa 24/7.",
+  },
+  {
+    slug: "oracle",
+    alt: "Oracle",
+    description:
+      "Bases de datos empresariales con alto rendimiento, seguridad y respaldo.",
+  },
+  {
+    slug: "apex",
+    alt: "Oracle APEX",
+    description:
+      "Desarrollo de aplicaciones web a medida, con despliegue ágil sobre infraestructura Oracle.",
+  },
+] as const;
+
+// Visual del ciclo del requerimiento: es una imagen (placeholder hasta recibir
+// el archivo `mesa-ayuda` en /solutions).
+const mesaImage = illustrationBySlug.get("mesa-ayuda");
+
+// Visual de los informes consolidados: imagen (placeholder hasta recibir
+// `informes` en /solutions).
+const informesImage = illustrationBySlug.get("informes");
+
+// TODO: confirmar con Juan — copy definitivo. En Figma va el mismo párrafo dos
+// veces (placeholder).
+const mesaParagraphs = [
+  "Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos, combinando experiencia, cercanía y respaldo técnico especializado.",
+  "Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos, combinando experiencia, cercanía y respaldo técnico especializado.",
+] as const;
+---
+
+<section
+  class="ss-rails bg-surface-muted border-t border-black/20"
+  aria-labelledby="soluciones-heading"
+>
+  {/* Franja superior del marco (línea a ~54px en Figma). */}
+  <div class="h-14 border-b border-black/20"></div>
+
+  {/* Intro */}
+  <div class="border-b border-black/20">
+    <Container class="py-14 text-center lg:py-20">
+      <div class="mx-auto max-w-[820px]">
+        <h1 id="soluciones-heading" class="text-display text-ink font-semibold">
+          Servicios en la nube
+        </h1>
+
+        <p
+          class="text-lead text-ink-secondary mx-auto mt-4 max-w-[720px] font-medium"
+        >
+          Desarrollamos soluciones tecnológicas para bancos, cooperativas y
+          fondos, combinando experiencia, cercanía y respaldo técnico
+          especializado.
+        </p>
+
+        <div class="mt-8 flex justify-center">
+          <Button variant="primary" size="md" href={headerActions.primary.href}>
+            Empezar ahora
+          </Button>
+        </div>
+      </div>
+    </Container>
+  </div>
+
+  {/* Banda de tarjetas: 6px entre cada línea y el borde de las tarjetas (Figma). */}
+  <div class="border-b border-black/20">
+    <Container class="py-[6px]">
+      <ul
+        role="list"
+        class="mx-auto grid max-w-[820px] gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[30px]"
+      >
+        {
+          cards.map((card) => {
+            const image = illustrationBySlug.get(card.slug);
+
+            return (
+              <li class="rounded-control flex flex-col items-center gap-4 border border-black/20 bg-white p-6 text-center">
+                <div class="flex h-12 items-center justify-center">
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={card.alt}
+                      class="max-h-10 w-auto object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span
+                      class="border-hairline bg-surface-muted text-ink-secondary/60 flex h-12 w-16 items-center justify-center rounded-[5px] border border-dashed"
+                      aria-hidden="true"
+                    >
+                      <Icon name="lucide:image" class="size-5" />
+                    </span>
+                  )}
+                </div>
+                <p class="text-ink-secondary text-sm leading-[1.3] font-semibold tracking-[-0.04em]">
+                  {card.description}
+                </p>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </Container>
+  </div>
+
+  {/* Diagrama de arquitectura animado */}
+  <Container class="py-16 lg:py-24">
+    <ArchitectureDiagram />
+  </Container>
+</section>
+
+{/* ===== Mesa de ayuda (Figma, Frame 38/40) ===== */}
+<section
+  class="border-y border-black/20 bg-white py-14 lg:py-16"
+  aria-labelledby="mesa-ayuda-heading"
+>
+  <Container>
+    {/* Header */}
+    <div class="mx-auto max-w-[840px] text-center">
+      <h2 id="mesa-ayuda-heading" class="text-display text-ink font-semibold">
+        Mesa de ayuda
+      </h2>
+
+      <p
+        class="text-lead text-ink-secondary mx-auto mt-4 max-w-[813px] font-medium"
+      >
+        Desarrollamos soluciones tecnológicas para bancos, cooperativas y
+        fondos, combinando experiencia, cercanía y respaldo técnico
+        especializado.
+      </p>
+
+      <div class="mt-6 flex justify-center">
+        <Button variant="primary" size="md" href={headerActions.primary.href}>
+          Empezar ahora
+        </Button>
+      </div>
+    </div>
+
+    {/* Dos columnas: imagen (izq.) + texto (der.) */}
+    <div
+      class="mx-auto mt-12 flex max-w-[840px] flex-col items-center gap-12 lg:mt-16 lg:flex-row lg:items-center lg:justify-between lg:gap-[53px]"
+    >
+      {/* Visual del ciclo del requerimiento (imagen / placeholder) */}
+      <div class="w-full max-w-[373px] shrink-0">
+        {
+          mesaImage ? (
+            <Image
+              src={mesaImage}
+              alt="Ciclo de atención de un requerimiento en la mesa de ayuda."
+              class="rounded-control aspect-[373/314] w-full border border-black/20 object-cover shadow-[0_1px_1px_rgba(0,0,0,0.25)]"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div
+              class="rounded-control border-hairline bg-surface-muted text-ink-secondary/60 flex aspect-[373/314] w-full items-center justify-center border border-dashed"
+              aria-hidden="true"
+            >
+              <Icon name="lucide:image" class="size-8" />
+            </div>
+          )
+        }
+      </div>
+
+      {/* Texto de apoyo */}
+      <div class="w-full max-w-[414px] space-y-8">
+        {
+          mesaParagraphs.map((text) => (
+            <p class="text-lead text-ink-secondary font-medium">{text}</p>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</section>
+
+{/* ===== Generación de informes (Figma, Frame 38/41) ===== */}
+<section class="ss-rails bg-surface-muted" aria-labelledby="informes-heading">
+  {/* Contenido + hairline inferior del marco (Line 34). */}
+  <div class="border-b border-black/20">
+    <Container class="pt-14 pb-16 lg:pt-16">
+      {/* Header */}
+      <div class="mx-auto max-w-[840px] text-center">
+        {/* "Generación" con tilde: el diseño la omite (§6, gramática). */}
+        <h2 id="informes-heading" class="text-display text-ink font-semibold">
+          Generación de informes
+        </h2>
+
+        <p
+          class="text-lead text-ink-secondary mx-auto mt-4 max-w-[813px] font-medium"
+        >
+          Desarrollamos soluciones tecnológicas para bancos, cooperativas y
+          fondos, combinando experiencia, cercanía y respaldo técnico
+          especializado.
+        </p>
+
+        <div class="mt-6 flex justify-center">
+          <Button variant="primary" size="md" href={headerActions.primary.href}>
+            Empezar ahora
+          </Button>
+        </div>
+      </div>
+
+      {/* Visual de informes (imagen / placeholder) */}
+      <div class="mx-auto w-full max-w-[780px]">
+        {
+          informesImage ? (
+            <Image
+              src={informesImage}
+              alt="Informes consolidados generados por la plataforma."
+              class="aspect-[3/2] w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div
+              class="rounded-control border-hairline flex aspect-[3/2] w-full items-center justify-center border border-dashed bg-white/50 text-ink-secondary/60"
+              aria-hidden="true"
+            >
+              <Icon name="lucide:image" class="size-8" />
+            </div>
+          )
+        }
+      </div>
+    </Container>
+  </div>
+
+  {/* Franja inferior del marco. */}
+  <div class="h-20"></div>
+</section>

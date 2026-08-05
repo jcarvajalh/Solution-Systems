@@ -1,16 +1,55 @@
 ---
+import Button from "@components/ui/Button.astro";
+
 export interface Props {
-  title: string;
+  title?: string;
   subtitle?: string;
-  ctaLabel: string;
-  ctaHref: string;
+  ctaLabel?: string;
+  ctaHref?: string;
 }
 
-const { title, subtitle, ctaLabel, ctaHref } = Astro.props;
+const {
+  title = "Lleva tu operación financiera al siguiente nivel",
+  subtitle = "Agenda una asesoría con nuestro equipo y descubre cómo Solution Systems puede optimizar tu infraestructura tecnológica.",
+  ctaLabel = "Empezar ahora",
+  ctaHref = "/contacto",
+} = Astro.props;
 ---
 
-<section>
-  <h2>{title}</h2>
-  {subtitle && <p>{subtitle}</p>}
-  <a href={ctaHref}>{ctaLabel}</a>
+<section class="bg-white" aria-labelledby="cta-heading">
+  {/*
+    El panel azul se alinea al marco de los rieles de la sección FAQ
+    (--rail-frame): centrado y sin padding lateral desde el breakpoint `nav`,
+    donde esos rieles se hacen visibles. Por debajo, px-6 para no tocar bordes.
+  */}
+  <div class="mx-auto w-full max-w-[var(--rail-frame)] px-6 nav:px-0">
+    <div
+      class="bg-brand px-6 py-16 text-center sm:px-12 lg:px-8 lg:py-[62px]"
+    >
+      <div class="mx-auto flex max-w-[786px] flex-col items-center">
+        <h2
+          id="cta-heading"
+          class="text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] text-white sm:text-[2.5rem] lg:text-[3rem] lg:leading-[1.29]"
+        >
+          {title}
+        </h2>
+
+        {
+          subtitle && (
+            <p class="mt-5 max-w-[676px] text-[1.125rem] leading-[1.3] font-normal tracking-[-0.04em] text-white sm:text-[1.25rem] lg:text-[1.5rem]">
+              {subtitle}
+            </p>
+          )
+        }
+
+        {
+          ctaLabel && (
+            <Button href={ctaHref} variant="inverse" size="md" class="mt-10">
+              {ctaLabel}
+            </Button>
+          )
+        }
+      </div>
+    </div>
+  </div>
 </section>

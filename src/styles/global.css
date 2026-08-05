@@ -56,6 +56,12 @@
   --color-chart-2: #eb6834;
   --color-chart-3: #1baf7a;
 
+  /* Línea divisoria de rejillas, tarjetas y rieles. TODO: confirmar hex en Figma. */
+  --color-hairline: #e6e6e6;
+
+  /* Radio de superficies (tarjetas, rejillas). TODO: confirmar en Figma. */
+  --radius-surface: 12px;
+
   /* Tipografía */
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
 
@@ -108,6 +114,7 @@
 
   /* Alto del header (Figma). El hero lo descuenta para calcular el suyo. */
   --header-height: 80px;
+  --rail-frame: 1104px;
 
   /* Holgura entre el borde inferior del hero y el de la ventana: deja ver que
      la página continúa. */
@@ -119,6 +126,7 @@
   Se restituye el puntero para todo control accionable, salvo los deshabilitados.
 */
 @layer base {
+
   button:not(:disabled),
   [role="button"]:not(:disabled),
   [role="tab"]:not(:disabled),
@@ -148,11 +156,42 @@
 }
 
 /*
+  Rieles verticales del marco de página. Se anclan al contenido (siempre 20px por
+  fuera del contenedor), no al viewport: mantener 168px fijos desalinearía el
+  motivo en pantallas > 1440px. Por debajo de 72rem el marco colapsaría contra el
+  padding del contenedor, así que se ocultan.
+*/
+@utility ss-rails {
+  position: relative;
+
+  @media (width >=72rem) {
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      width: 1px;
+      background-color: var(--color-hairline);
+    }
+
+    &::before {
+      left: calc((100% - var(--rail-frame)) / 2);
+    }
+
+    &::after {
+      right: calc((100% - var(--rail-frame)) / 2);
+    }
+  }
+}
+
+/*
   `!important` justificado: debe ganar a cualquier transición/animación declarada
   por utilidades de Tailwind o CSS de componente cuando el usuario pide menos
   movimiento (§9).
 */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

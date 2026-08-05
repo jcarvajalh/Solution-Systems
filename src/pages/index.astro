@@ -2,11 +2,21 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Hero from "@components/sections/Hero.astro";
 import InteractiveDemo from "@components/sections/InteractiveDemo.astro";
-
-// TODO: ServiceCards, StatsBar, ClientLogos, TestimonialsCarousel, FAQSection, CTABanner
+import ClientLogos from "@components/sections/ClientLogos.astro";
+import ServiceCards from "@components/sections/ServiceCards.astro";
+import StatsBar from "@components/sections/StatsBar.astro";
+import Testimonials from "@components/sections/Testimonials.astro";
+import FAQSection from "@components/sections/FAQSection.astro";
+import CTABanner from "@components/sections/CTABanner.astro";
 ---
 
 <BaseLayout title="Inicio">
   <Hero />
   <InteractiveDemo />
+  <ClientLogos />
+  <ServiceCards />
+  <StatsBar />
+  <Testimonials />
+  <FAQSection />
+  <CTABanner />
 </BaseLayout>

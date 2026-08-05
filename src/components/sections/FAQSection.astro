@@ -1,20 +1,164 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import Accordion from "@components/ui/Accordion.astro";
+import { Icon } from "astro-icon/components";
+
+import Container from "@components/layout/Container.astro";
+import Button from "@components/ui/Button.astro";
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
 
 export interface Props {
   title?: string;
-  items: CollectionEntry<"faqs">[];
+  description?: string;
+  /** Línea de apoyo antes del CTA (p. ej. "¿Quieres una demostración?"). */
+  note?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  /** Índice del ítem que arranca expandido. */
+  defaultOpen?: number;
+  items?: FaqItem[];
 }
 
-const { title, items } = Astro.props;
+/*
+  Contenido placeholder tomado del diseño de Figma (varias preguntas repiten el
+  mismo texto). La sección se reutiliza en el home, /contacto y /soporte, por eso
+  los textos son props con estos valores por defecto para el home.
+*/
+// TODO: confirmar con Juan — preguntas y respuestas reales de la colección `faqs`.
+const placeholderAnswer =
+  "Resuelve tus dudas sobre nuestros productos y servicios, y descubre cómo Solution Systems impulsa la operación de tu entidad financiera.";
+
+const defaultItems: FaqItem[] = [
+  { question: "¿Qué servicios ofrecen?", answer: placeholderAnswer },
+  { question: "¿Qué tipo de soporte brindan?", answer: placeholderAnswer },
+  { question: "¿Cuánto cuestan los productos?", answer: placeholderAnswer },
+  { question: "¿Puedo adquirir solo un producto?", answer: placeholderAnswer },
+  { question: "¿Qué servicios ofrecen?", answer: placeholderAnswer },
+  { question: "¿Qué servicios ofrecen?", answer: placeholderAnswer },
+];
+
+const {
+  title = "Preguntas frecuentes",
+  description = "Resuelve tus dudas sobre nuestros productos y servicios, y descubre cómo Solution Systems impulsa la operación de tu entidad financiera.",
+  note = "¿Quieres una demostración?",
+  ctaLabel = "Empezar ahora",
+  ctaHref = "/contacto",
+  defaultOpen = 0,
+  items = defaultItems,
+} = Astro.props;
 ---
 
-<section>
-  {title && <h2>{title}</h2>}
-  {
-    items.map((item) => (
-      <Accordion title={item.data.question}>{item.data.answer}</Accordion>
-    ))
-  }
+<section
+  class="ss-rails border-hairline bg-surface-muted border-b py-16 lg:py-[100px]"
+  aria-labelledby="faq-heading"
+>
+  <Container>
+    <div class="grid gap-12 lg:grid-cols-[27.5rem_1fr] lg:items-start lg:gap-20">
+      <!-- Columna izquierda: encabezado + CTA -->
+      <div class="lg:max-w-[440px]">
+        <h2
+          id="faq-heading"
+          class="text-ink text-[2rem] leading-[1.1] font-semibold tracking-[-0.02em] lg:text-[2.75rem] lg:leading-[1.29]"
+        >
+          {title}
+        </h2>
+
+        <p
+          class="text-ink-secondary mt-6 max-w-[414px] text-[1.125rem] leading-[1.28] font-normal tracking-[-0.04em]"
+        >
+          {description}
+        </p>
+
+        {
+          note && (
+            <p class="text-ink-secondary mt-6 text-[1.125rem] leading-[1.28] font-normal tracking-[-0.04em]">
+              {note}
+            </p>
+          )
+        }
+
+        {
+          ctaLabel && (
+            <Button
+              href={ctaHref}
+              variant="primary"
+              size="md"
+              class="mt-8"
+            >
+              {ctaLabel}
+            </Button>
+          )
+        }
+      </div>
+
+      <!-- Columna derecha: acordeón de preguntas -->
+      <div class="ss-accordion">
+        {
+          items.map((item, index) => (
+            <details
+              name="faq"
+              open={index === defaultOpen}
+              class="group border-hairline border-b last:border-b-0 open:my-2 open:rounded-[20px] open:border open:shadow-[0_1px_1px_rgba(0,0,0,0.25)]"
+            >
+              <summary class="text-ink focus-visible:outline-brand flex items-center justify-between gap-6 rounded-[20px] px-6 py-5 focus-visible:outline-2 focus-visible:-outline-offset-2">
+                <h3 class="text-[1.375rem] leading-[1.2] font-semibold tracking-[-0.04em] lg:text-[1.75rem]">
+                  {item.question}
+                </h3>
+                <Icon
+                  name="lucide:chevron-down"
+                  class="text-ink size-6 shrink-0 transition-transform duration-200 ease-out group-open:-rotate-180 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </summary>
+              <p class="text-ink-secondary max-w-[466px] px-6 pb-6 text-[1rem] leading-[1.3] font-normal tracking-[-0.04em]">
+                {item.answer}
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
 </section>
+
+<style>
+  /*
+    Oculta el marcador nativo de <summary> (triángulo) en todos los motores; el
+    chevron de la derecha cumple esa función. Caso que Tailwind no cubre limpio (§5.2).
+  */
+  .ss-accordion summary {
+    list-style: none;
+  }
+
+  .ss-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /*
+    Apertura/cierre suave del panel (§5.2 animaciones). `::details-content` es el
+    contenido que <details> muestra/oculta; se anima su altura de 0 a `auto`
+    gracias a `interpolate-size`, algo que Tailwind no cubre. Navegadores sin
+    soporte para el pseudo-elemento abren al instante (degradación elegante); la
+    regla global de prefers-reduced-motion ya anula la transición (§9).
+  */
+  .ss-accordion {
+    interpolate-size: allow-keywords;
+  }
+
+  .ss-accordion details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.25s ease,
+      content-visibility 0.3s allow-discrete;
+  }
+
+  .ss-accordion details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+</style>

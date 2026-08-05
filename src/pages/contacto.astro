@@ -1,7 +1,151 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
 
-// TODO: PageHeader, ContactForm, FAQSection, CTABanner
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Container from "@components/layout/Container.astro";
+import ContactForm from "@components/sections/ContactForm.astro";
+import FAQSection from "@components/sections/FAQSection.astro";
+import CTABanner from "@components/sections/CTABanner.astro";
+import { siteConfig } from "@config/site";
+
+const description =
+  "Ponte en contacto con Solution Systems. Escríbenos por el formulario y te responderemos en menos de 24 horas.";
+
+/*
+  Datos de contacto tomados del diseño (Figma, Frame 43). El icono de teléfono
+  del diseño es WhatsApp; se usa `lucide:phone` para no depender de un logo de
+  marca. `#1F1F1F` de los títulos se normaliza a `ink`.
+*/
+const contactItems = [
+  {
+    icon: "lucide:map-pin",
+    title: "Dirección de nuestra oficina",
+    lines: [
+      "Edificio Santa Mónica Central",
+      "Calle 22 Norte. #6AN-24",
+      "Cali, Valle del Cauca",
+    ],
+  },
+  {
+    icon: "lucide:phone",
+    title: "Teléfono",
+    lines: ["+57 301 813 5745"],
+    href: "tel:+573018135745",
+  },
+  {
+    icon: "lucide:mail",
+    title: "Correo electrónico",
+    lines: ["contacto@e-solutionsystems.net"],
+    href: "mailto:contacto@e-solutionsystems.net",
+  },
+  {
+    icon: "lucide:clock",
+    title: "Horario de atención",
+    lines: ["De lunes a viernes: de 8:00 a 18:00 gmt-5"],
+  },
+] as const;
+
+// Datos estructurados (§8). Solo datos verificables del diseño.
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    telephone: "+573018135745",
+    email: "contacto@e-solutionsystems.net",
+    areaServed: "CO",
+    availableLanguage: "Spanish",
+  },
+};
 ---
 
-<BaseLayout title="Contacto" />
+<BaseLayout title="Contacto" description={description}>
+  <section class="ss-rails border-y border-black/20 bg-white">
+    {/* Franja superior del marco (Line 23 en Figma). */}
+    <div class="h-[53px] border-b border-black/20"></div>
+
+    <Container class="py-8">
+      <div
+        class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_458px] lg:items-start lg:gap-16"
+      >
+        {/* Columna de información */}
+        <div class="max-w-[510px]">
+          <h1
+            class="text-[2.5rem] leading-[1.3] font-semibold tracking-[-0.04em] text-ink"
+          >
+            Ponte en contacto con <span class="text-brand">nosotros</span>
+          </h1>
+
+          <p
+            class="text-ink-secondary mt-4 max-w-[394px] text-[1.125rem] leading-[1.9] font-medium tracking-[-0.04em]"
+          >
+            ¿Tienes alguna pregunta o comentario? Rellena el formulario y te
+            responderemos lo antes posible.
+          </p>
+
+          <ul role="list" class="mt-10 space-y-6">
+            {
+              contactItems.map((item) => (
+                <li class="flex gap-3">
+                  <Icon
+                    name={item.icon}
+                    class="text-brand mt-1 size-5 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <p class="text-ink text-[1.125rem] font-medium tracking-[-0.04em]">
+                      {item.title}
+                    </p>
+                    <div class="mt-0.5">
+                      {"href" in item && item.href ? (
+                        <a
+                          href={item.href}
+                          class="text-ink-secondary hover:text-brand text-[1.125rem] leading-[1.3] font-medium tracking-[-0.04em] transition-colors"
+                        >
+                          {item.lines[0]}
+                        </a>
+                      ) : (
+                        item.lines.map((line) => (
+                          <p class="text-ink-secondary text-[1.125rem] leading-[1.3] font-medium tracking-[-0.04em]">
+                            {line}
+                          </p>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+
+          {/* Tiempo de respuesta: sin icono, alineado con la columna de texto. */}
+          <div class="mt-6 pl-8">
+            <p class="text-ink text-[1.125rem] font-bold tracking-[-0.04em]">
+              Tiempo de respuesta
+            </p>
+            <p
+              class="text-ink-secondary mt-0.5 text-[1.125rem] leading-[1.3] font-medium tracking-[-0.04em]"
+            >
+              Normalmente respondemos a las consultas en un plazo de 24 horas.
+            </p>
+          </div>
+        </div>
+
+        {/* Formulario */}
+        <ContactForm />
+      </div>
+    </Container>
+  </section>
+
+  <FAQSection />
+  <CTABanner />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(contactSchema)}
+    is:inline
+  />
+</BaseLayout>

@@ -1,4 +1,30 @@
-import type { HeaderActions, NavItem, NavLink } from "@/types";
+import type { FooterColumn, HeaderActions, NavItem } from "@/types";
+import { siteConfig } from "@config/site";
+
+export interface Product {
+  name: string;
+  slug: string;
+}
+
+/**
+ * Catálogo de productos. Fuente única para el desplegable del header, la columna
+ * del footer y las fichas (`/productos/[slug]`), que comparten diseño.
+ * TODO: confirmar con Juan — catálogo definitivo y rutas de cada producto.
+ */
+export const products: Product[] = [
+  { name: "RISK", slug: "risk" },
+  { name: "IAS Financial", slug: "ias-financial" },
+  { name: "IAS Human", slug: "ias-human" },
+  { name: "IAS Accounts", slug: "ias-accounts" },
+  { name: "IAS Operational", slug: "ias-operational" },
+  { name: "IAS NIIF", slug: "ias-niif" },
+  { name: "IAS Audit", slug: "ias-audit" },
+];
+
+const productLinks = products.map((product) => ({
+  label: product.name,
+  href: `/productos/${product.slug}`,
+}));
 
 /**
  * Orden y etiquetas tomados del header de Figma (node 154:4651).
@@ -7,24 +33,58 @@ import type { HeaderActions, NavItem, NavLink } from "@/types";
 export const mainNav: NavItem[] = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/nosotros" },
-  // TODO: confirmar con Juan — ítems del desplegable de Productos (no diseñados en Figma).
-  { label: "Productos", href: "/productos", hasDropdown: true },
+  {
+    label: "Productos",
+    href: "/productos",
+    hasDropdown: true,
+    dropdown: productLinks,
+  },
   { label: "Soluciones", href: "/soluciones" },
-  // TODO: confirmar con Juan — la página /recursos no existe todavía y su
-  // desplegable tampoco está diseñado en Figma.
-  { label: "Recursos", href: "/recursos", hasDropdown: true },
+  {
+    label: "Recursos",
+    href: "/contacto",
+    hasDropdown: true,
+    dropdown: [
+      { label: "Blog", href: "/blog" },
+      { label: "Contacto", href: "/contacto" },
+    ],
+  },
 ];
 
 export const headerActions: HeaderActions = {
-  secondary: { label: "Soporte", href: "/soporte" },
+  // "Soporte" abre el portal de Mesa de Ayuda (externo).
+  secondary: { label: "Soporte", href: siteConfig.supportUrl || "/soporte" },
   // TODO: confirmar con Juan — destino de "Empezar ahora"; se asume /contacto.
   primary: { label: "Empezar ahora", href: "/contacto" },
 };
 
-export const footerNav: NavLink[] = [
-  { label: "Inicio", href: "/" },
-  { label: "Nosotros", href: "/nosotros" },
-  { label: "Soluciones", href: "/soluciones" },
-  { label: "Contacto", href: "/contacto" },
-  { label: "Soporte", href: "/soporte" },
+/**
+ * Columnas de enlaces del footer (Figma, node Frame 32). Los ítems sin `href`
+ * se pintan como texto: su ruta aún no existe/está por confirmar.
+ */
+export const footerColumns: FooterColumn[] = [
+  {
+    title: "Productos",
+    titleHref: "/productos",
+    links: productLinks,
+  },
+  {
+    title: "Soluciones",
+    titleHref: "/soluciones",
+    links: [
+      { label: "Soluciones en la nube", href: "/soluciones" },
+      { label: "SaaS", href: "/soluciones" },
+      { label: "IaaS", href: "/soluciones" },
+      { label: "Mesa de ayuda", href: siteConfig.supportUrl || "/soporte" },
+    ],
+  },
+  {
+    title: "Recursos",
+    // TODO: confirmar con Juan — páginas de Clientes.
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Clientes" },
+      { label: "Política de privacidad", href: "/politica-de-privacidad" },
+    ],
+  },
 ];

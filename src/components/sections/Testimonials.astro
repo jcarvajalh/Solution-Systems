@@ -1,0 +1,85 @@
+---
+import { getImage } from "astro:assets";
+import Container from "@components/layout/Container.astro";
+import TestimonialsCarousel, {
+  type Testimonial,
+} from "@components/islands/TestimonialsCarousel";
+
+/*
+  Logos de empresa resueltos por slug: al soltar `cliente-1.png` (png/jpg/webp/
+  svg) en src/assets/images/testimonials/ aparece en su tarjeta; mientras no
+  exista, la tarjeta muestra un marcador con las iniciales (patrón de ClientLogos).
+*/
+const companyLogos = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/testimonials/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
+const logoBySlug = new Map(
+  Object.entries(companyLogos).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+
+async function resolveLogo(slug: string): Promise<string | undefined> {
+  const asset = logoBySlug.get(slug);
+  if (!asset) return undefined;
+  // 2× el tamaño de pantalla (32 px) para nitidez en pantallas retina.
+  const optimized = await getImage({ src: asset, width: 64, format: "webp" });
+  return optimized.src;
+}
+
+/*
+  Texto placeholder tomado del diseño de Figma (todas las tarjetas repiten la
+  misma cita). Pendiente de reemplazar por testimonios reales de la colección
+  `testimonials`.
+*/
+// TODO: confirmar con Juan — testimonios reales (autor, empresa, cargo, cita, año).
+const quote =
+  "Optimizamos nuestra operación con Solution Systems. Soporte rápido, equipo que entiende el sector financiero.";
+
+type TestimonialSeed = Omit<Testimonial, "logo"> & { companySlug: string };
+
+const seeds: TestimonialSeed[] = [
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2023", company: "Empresa cliente", companySlug: "cliente-1" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2025", company: "Empresa cliente", companySlug: "cliente-2" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2021", company: "Empresa cliente", companySlug: "cliente-3" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2022", company: "Empresa cliente", companySlug: "cliente-4" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2024", company: "Empresa cliente", companySlug: "cliente-5" },
+  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2020", company: "Empresa cliente", companySlug: "cliente-6" },
+];
+
+const testimonials: Testimonial[] = await Promise.all(
+  seeds.map(async ({ companySlug, ...rest }) => ({
+    ...rest,
+    logo: await resolveLogo(companySlug),
+  })),
+);
+---
+
+<section
+  class="ss-rails border-hairline border-b bg-white py-16 lg:py-[95px]"
+  aria-labelledby="testimonios-heading"
+>
+  <Container>
+    <h2
+      id="testimonios-heading"
+      class="text-ink max-w-[657px] text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.02em] lg:text-[3rem]"
+    >
+      Clientes que hablan por nosotros
+    </h2>
+    <p
+      class="text-ink-secondary mt-6 max-w-[635px] text-[1.125rem] leading-[1.28] font-normal tracking-[-0.02em]"
+    >
+      Testimonios reales de clientes que han optimizado su operación con nuestras
+      soluciones tecnológicas.
+    </p>
+  </Container>
+
+  <Container class="mt-12">
+    <TestimonialsCarousel testimonials={testimonials} client:visible />
+  </Container>
+</section>
