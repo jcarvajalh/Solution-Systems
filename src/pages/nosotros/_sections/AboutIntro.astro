@@ -23,7 +23,7 @@ const iconBySlug = new Map(
 );
 
 interface Stat {
-  /** Cifra destacada (ej. "+25 años de experiencia"). */
+  /** Cifra destacada (ej. "+26 años de experiencia"). */
   value: string;
   /** Texto de apoyo bajo la cifra. */
   label: string;
@@ -31,21 +31,16 @@ interface Stat {
   icon: string;
 }
 
-/*
-  Copy tomado del diseño de Figma.
-  TODO: confirmar con Juan — cifras. Datos oficiales (CLAUDE.md §2): +25 años y
-  +15 entidades. El diseño muestra "+30 clientes", "+300 usuarios activos" y
-  "15 departamentos", que aún no están verificados.
-*/
+// Cifras reales (contenido.md §2).
 const stats: Stat[] = [
   {
-    value: "+25 años de experiencia",
-    label: "Ayudando a entidades financieras desde 1998 a crecer.",
+    value: "+26 años de experiencia",
+    label: "Ayudando a organizaciones a crecer.",
     icon: "experiencia",
   },
   {
     value: "+30 clientes",
-    label: "Tenemos clientes en 15 diferentes departamentos de Colombia.",
+    label: "Con presencia en 15 departamentos de Colombia.",
     icon: "clientes",
   },
   {
@@ -55,9 +50,11 @@ const stats: Stat[] = [
   },
 ];
 
-// TODO: confirmar historia real de la empresa
-const history =
-  "Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos. Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos. Servicios tecnológicos con software integrales, permitiendo optimizar procesos, gestionar de forma eficiente recursos, controlar riesgos y costos.";
+// Historia real de la empresa (contenido.md §2), en dos párrafos.
+const history = [
+  "Solution Systems nació con el propósito de acompañar a las organizaciones en la modernización de sus procesos. Desde entonces hemos desarrollado dos soluciones integrales: IAS, un ERP con módulos financieros, de captaciones y colocaciones, y de recurso humano; y RISK, una plataforma para la gestión de riesgos financieros.",
+  "Con 26 años de trayectoria, hemos construido nuestras soluciones sobre tecnología Oracle —base de datos Oracle e interfaz en Oracle Apex— y hoy complementamos nuestros productos con servicios en la nube (OCI), mesa de ayuda, bolsas de horas para ajustes y análisis de procesos financieros y administrativos.",
+];
 
 /*
   Mapa de fondo de la línea de tiempo (placeholder): al soltar `mapa-mundi.png`
@@ -76,35 +73,40 @@ interface Milestone {
 }
 
 /*
-  Hitos tomados del diseño de Figma.
-  TODO: confirmar con Juan — los hitos 2021 y 2024 nombran "Risk Solution", marca
-  que CLAUDE.md §12.2 pide NO mezclar en este sitio. Pendiente de validar el copy.
+  Hitos reales (contenido.md §2).
+  TODO: confirmar con Juan — el año de fundación (2000) figura entre corchetes en
+  el contenido, pendiente de validar.
 */
 const milestones: Milestone[] = [
   {
-    year: "2014",
-    text: "Fundación de Solution Systems, enfocada en soluciones para el sector financiero.",
+    year: "2000",
+    text: "Fundación de Solution Systems.",
     offset: "lg:mt-[297px]",
   },
   {
-    year: "2018",
-    text: "Lanzamiento del primer módulo de Riesgo de crédito y Business Intelligence.",
-    offset: "lg:mt-[240px]",
+    year: "2008",
+    text: "Lanzamiento de las primeras versiones de nuestro ERP.",
+    offset: "lg:mt-[173px]",
   },
   {
-    year: "2021",
-    text: "Incorporación de SARLAFT y Riesgo operacional al ecosistema Risk Solution.",
+    year: "2018",
+    text: "Incorporación de servicios en la nube.",
     offset: "lg:mt-[271px]",
   },
   {
-    year: "2023",
-    text: "Integración de inteligencia artificial y RPA en Otorgamiento de crédito.",
-    offset: "lg:mt-[327px]",
+    year: "2021",
+    text: "Lanzamiento de RISK solution.",
+    offset: "lg:mt-[190px]",
   },
   {
-    year: "2024",
-    text: "Risk Solution: plataforma integral con 7 módulos interconectados.",
-    offset: "lg:mt-[173px]",
+    year: "2023",
+    text: "Integración de procesos automatizados (RPA).",
+    offset: "lg:mt-[300px]",
+  },
+  {
+    year: "2025",
+    text: "Incorporación de inteligencia artificial (IA) en nuestros productos y servicios.",
+    offset: "lg:mt-[150px]",
   },
 ];
 ---
@@ -118,8 +120,8 @@ const milestones: Milestone[] = [
         Somos Solution Systems
       </h1>
       <p class="text-lead text-ink-secondary mt-8 max-w-[609px] font-medium">
-        Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos,
-        combinando experiencia, cercanía y respaldo técnico especializado.
+        Desarrollamos soluciones tecnológicas que combinan 26 años de
+        experiencia, cercanía y respaldo técnico especializado.
       </p>
     </Container>
   </div>
@@ -168,9 +170,11 @@ const milestones: Milestone[] = [
       <h2 class="text-ink text-[1.75rem] leading-[1.2] font-semibold tracking-[-0.04em] sm:text-[2rem] sm:leading-[1.31]">
         Nuestra historia
       </h2>
-      <p class="text-lead text-ink-secondary mt-6 max-w-[1047px] font-medium">
-        {history}
-      </p>
+      <div class="mt-6 max-w-[1047px] space-y-5">
+        {history.map((paragraph) => (
+          <p class="text-lead text-ink-secondary font-medium">{paragraph}</p>
+        ))}
+      </div>
     </Container>
   </div>
   </div>

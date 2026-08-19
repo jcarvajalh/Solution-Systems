@@ -14,7 +14,7 @@ export const siteConfig: SiteConfig = {
   // Datos de contacto tomados del footer de Figma (Frame 32).
   contact: {
     email: "comercial@e-solutionsystems.net",
-    phone: "+57 3018135745",
+    phone: "+57 301 813 5745",
     address: "",
   },
   // Portal de Mesa de Ayuda (Oracle APEX). Fuente única: la usan el botón
@@ -27,8 +27,8 @@ export const siteConfig: SiteConfig = {
 
 /** Titular de la rejilla. El salto es del diseño (≥1024px); abajo el texto fluye solo. */
 export const clientsHeading = [
-  "Únete a más de 15 entidades que confían en el ERP IAS de",
-  "Solution Systems.",
+  "Únete a más de 15 organizaciones que ya confían en",
+  "nuestras soluciones.",
 ];
 
 /** Logos de la rejilla de clientes. `null` deja la celda vacía (ver diseño). */
@@ -41,6 +41,7 @@ export const clients: (Client | null)[] = [
   { name: "Promotora Energética del Centro", slug: "promotora" },
   { name: "Personería de de santiago de cali", slug: "personeria" },
   { name: "IFC — Instituto Financiero de Casanare", slug: "ifc" },
-  { name: "InfiValle", slug: "infivalle" },
+  // Nota (contenido.md): se retira el logo de INFIVALLE; en su lugar entra Promueve+.
+  { name: "Promueve+", slug: "promueve-mas" },
   { name: "Infibagué", slug: "infibague" },
 ];

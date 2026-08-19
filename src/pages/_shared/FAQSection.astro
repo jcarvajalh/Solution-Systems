@@ -22,21 +22,40 @@ export interface Props {
 }
 
 /*
-  Contenido placeholder tomado del diseño de Figma (varias preguntas repiten el
-  mismo texto). La sección se reutiliza en el home, /contacto y /soporte, por eso
-  los textos son props con estos valores por defecto para el home.
+  Preguntas frecuentes del home (contenido.md §1). La sección se reutiliza en
+  /contacto con otras preguntas que se pasan por props (ver contacto.astro).
 */
-// TODO: confirmar con Juan — preguntas y respuestas reales de la colección `faqs`.
-const placeholderAnswer =
-  "Resuelve tus dudas sobre nuestros productos y servicios, y descubre cómo Solution Systems impulsa la operación de tu entidad financiera.";
-
 const defaultItems: FaqItem[] = [
-  { question: "¿Qué servicios ofrecen?", answer: placeholderAnswer },
-  { question: "¿Qué tipo de soporte brindan?", answer: placeholderAnswer },
-  { question: "¿Cuánto cuestan los productos?", answer: placeholderAnswer },
-  { question: "¿Puedo adquirir solo un producto?", answer: placeholderAnswer },
-  { question: "¿Qué servicios ofrecen?", answer: placeholderAnswer },
-  { question: "¿Qué servicios ofrecen?", answer: placeholderAnswer },
+  {
+    question: "¿Qué servicios ofrecen?",
+    answer:
+      "Ofrecemos dos soluciones: IAS (ERP para la gestión financiera, operativa y de recurso humano de tu organización) y RISK (gestión de riesgo de crédito, liquidez y mercado), junto con servicios en la nube sobre Oracle, mesa de ayuda, bolsas de horas para ajustes y análisis de procesos financieros y administrativos.",
+  },
+  {
+    question: "¿Qué tipo de soporte brindan?",
+    answer:
+      "Mesa de ayuda, con seguimiento de cada requerimiento desde su creación hasta su solución, y bolsas de horas para ajustes puntuales de software.",
+  },
+  {
+    question: "¿Cuál es el costo de los productos?",
+    answer:
+      "El costo depende de los módulos, el volumen de usuarios y el modelo de despliegue (SaaS o IaaS). Contáctanos para una cotización a la medida de tu organización.",
+  },
+  {
+    question: "¿Puedo adquirir solo un producto?",
+    answer:
+      "Sí. IAS y RISK se pueden adquirir de forma independiente, y también es posible implementar módulos específicos según tu necesidad.",
+  },
+  {
+    question: "¿Qué tecnología usan?",
+    answer:
+      "Nuestras soluciones están construidas sobre base de datos Oracle, con interfaz en Oracle Apex, y pueden desplegarse en Oracle Cloud Infrastructure (OCI).",
+  },
+  {
+    question: "¿Cómo es el proceso de implementación?",
+    answer:
+      "Iniciamos con un análisis de tus procesos financieros y administrativos, seguido de la parametrización e implementación de los módulos de IAS y/o RISK que necesites, con acompañamiento de nuestro equipo durante todo el proceso.",
+  },
 ];
 
 const {

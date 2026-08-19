@@ -1,13 +1,12 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import AboutIntro from "@components/sections/AboutIntro.astro";
-import TeamGrid from "@components/sections/TeamGrid.astro";
+import AboutIntro from "./_sections/AboutIntro.astro";
+// La sección "Nuestro equipo" (TeamGrid) no aplica por ahora (contenido.md §2).
 ---
 
 <BaseLayout
   title="Nosotros"
-  description="Solution Systems: más de 25 años desarrollando software para bancos, cooperativas y fondos de inversión en Colombia."
+  description="Solution Systems: más de 26 años desarrollando software para el sector financiero y organizaciones en Colombia."
 >
   <AboutIntro />
-  <TeamGrid />
 </BaseLayout>

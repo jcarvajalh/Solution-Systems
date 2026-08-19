@@ -1,21 +1,10 @@
-export type ModuleId =
-  | "financial"
-  | "accounts"
-  | "human"
-  | "operational"
-  | "niif"
-  | "risk"
-  | "security"
-  | "audit";
+export type ModuleId = "financial" | "accounts" | "human" | "risk";
 
 export type IconName =
   | "circle-dollar-sign"
   | "users"
   | "square-user"
-  | "settings"
-  | "triangle-alert"
-  | "shield-check"
-  | "file-plus"
+  // `search` no es de un módulo: lo usa el buscador del menú lateral.
   | "search";
 
 /** `critical` reproduce la fila de indicadores en rojo del diseño. */

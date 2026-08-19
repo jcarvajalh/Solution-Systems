@@ -9,16 +9,13 @@ export interface Product {
 /**
  * Catálogo de productos. Fuente única para el desplegable del header, la columna
  * del footer y las fichas (`/productos/[slug]`), que comparten diseño.
- * TODO: confirmar con Juan — catálogo definitivo y rutas de cada producto.
+ * Son cuatro productos (contenido.md): RISK e IAS (Financial, Human, Accounts).
  */
 export const products: Product[] = [
   { name: "RISK", slug: "risk" },
   { name: "IAS Financial", slug: "ias-financial" },
   { name: "IAS Human", slug: "ias-human" },
   { name: "IAS Accounts", slug: "ias-accounts" },
-  { name: "IAS Operational", slug: "ias-operational" },
-  { name: "IAS NIIF", slug: "ias-niif" },
-  { name: "IAS Audit", slug: "ias-audit" },
 ];
 
 const productLinks = products.map((product) => ({

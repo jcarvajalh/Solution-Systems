@@ -25,14 +25,27 @@ escribir código:
 ## 2. Contexto del proyecto
 
 - **Cliente**: Solution Systems, empresa colombiana de software financiero con
-  +25 años de experiencia sirviendo a bancos, cooperativas y fondos de inversión.
+  +26 años de experiencia acompañando organizaciones (bancos, cooperativas,
+  fondos e institutos financieros del sector gobierno) en su transformación
+  tecnológica.
 - **Objetivo**: sitio corporativo multipágina (rediseño completo), no una landing.
 - **Audiencia**: entidades financieras B2B en Colombia. Tono profesional,
   confiable, concreto.
-- **Datos verificados** (usar SOLO estos como cifras oficiales):
-  - `+15 entidades financieras`
-  - `+25 años de experiencia`
-- **Servicios**: son DOS, no tres → `Servicios en la Nube` y `Mesa de Ayuda`.
+- **Datos verificados** (fuente: `contenido.md`; usar SOLO estos como cifras
+  oficiales):
+  - `+26 años de experiencia`
+  - `+30 clientes activos`
+  - `+300 usuarios activos`
+  - `+15 organizaciones / presencia en 15 departamentos de Colombia`
+- **Productos**: son DOS familias → `IAS` (ERP con módulos Financial, Human y
+  Accounts) y `RISK` (gestión de riesgo de crédito, liquidez y mercado). En el
+  sitio se exponen cuatro fichas de producto: `RISK`, `IAS Financial`,
+  `IAS Human` e `IAS Accounts`.
+- **Servicios**: `Servicios en la nube` (Oracle Cloud / OCI en SaaS o IaaS),
+  `Bolsas de horas y ajustes` (desarrollos a medida sobre Oracle Apex) y
+  `Mesa de ayuda` (soporte técnico con seguimiento de requerimientos).
+- **Tecnología del producto**: base de datos Oracle, interfaz en Oracle Apex y
+  despliegue en Oracle Cloud Infrastructure (OCI).
 - **Terminología del dominio**: SARLAFT, riesgo LA/FT, normatividad,
   Superintendencia Financiera, Oracle APEX, PL/SQL.
 

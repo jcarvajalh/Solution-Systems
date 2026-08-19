@@ -4,28 +4,99 @@ import Button from "@components/ui/Button.astro";
 import { headerActions } from "@config/navigation";
 
 interface Props {
-  /** Nombre del producto; solo cambia el titular del hero. */
+  /** Slug del producto; resuelve el copy real (contenido.md §3). */
+  slug: string;
+  /** Nombre del producto; titular del hero. */
   productName: string;
 }
 
-const { productName } = Astro.props;
-
-// TODO: confirmar con Juan — copy real por producto (intro y bloques de features).
-const intro =
-  "Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos, combinando experiencia, cercanía y respaldo técnico especializado.";
+const { slug, productName } = Astro.props;
 
 interface Feature {
   title: string;
   text: string;
-  /** Lado de la imagen en escritorio; en móvil siempre va arriba. */
-  imageSide: "left" | "right";
 }
 
-const features: Feature[] = [
-  { title: "Controla matrices", text: intro, imageSide: "left" },
-  { title: "Genera informes", text: intro, imageSide: "right" },
-  { title: "Crea mapas de procesos", text: intro, imageSide: "left" },
-];
+interface ProductContent {
+  intro: string;
+  features: Feature[];
+}
+
+/*
+  Copy real por producto (contenido.md §3). Los productos que aún no tienen copy
+  definido usan el respaldo genérico de más abajo.
+  TODO: confirmar con Juan — copy real de RISK.
+*/
+const productContent: Record<string, ProductContent> = {
+  "ias-financial": {
+    intro:
+      "Contabilidad, presupuesto, tesorería, facturación, contratos, activos fijos e inventarios, integrados en una sola plataforma sobre tecnología Oracle.",
+    features: [
+      {
+        title: "Control",
+        text: "Centraliza y controla la información contable y presupuestal de tu organización, con trazabilidad completa y reportes ajustados a la normativa vigente.",
+      },
+      {
+        title: "Informes",
+        text: "Genera informes financieros y presupuestales de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
+      },
+      {
+        title: "Rutas de procesos",
+        text: "Configura y da seguimiento a los procesos financieros y administrativos de tu organización, facilitando auditorías y la toma de decisiones.",
+      },
+    ],
+  },
+  "ias-accounts": {
+    intro:
+      "Crédito, cartera, depósitos a la vista, depósitos a plazo, recaudos e inversiones, integrados en una sola plataforma sobre tecnología Oracle.",
+    features: [
+      {
+        title: "Control",
+        text: "Controla en un solo lugar tu cartera de crédito, depósitos a la vista y a plazo, recaudos e inversiones, con trazabilidad completa de cada operación y reportes ajustados a la normativa vigente.",
+      },
+      {
+        title: "Informes",
+        text: "Genera informes de cartera, captaciones y colocaciones de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
+      },
+      {
+        title: "Rutas de procesos",
+        text: "Configura y da seguimiento a los procesos de otorgamiento de crédito, recaudo e inversión de tu organización, facilitando auditorías y la toma de decisiones.",
+      },
+    ],
+  },
+  "ias-human": {
+    intro:
+      "Módulo especializado en la gestión de recursos humanos para empresas del sector gobierno, integrado en una sola plataforma sobre tecnología Oracle.",
+    features: [
+      {
+        title: "Control",
+        text: "Centraliza la información de carrera administrativa, novedades de nómina y afiliaciones a seguridad social de tu personal, con trazabilidad completa y reportes ajustados a la normativa vigente.",
+      },
+      {
+        title: "Informes",
+        text: "Genera informes de nómina, seguridad social y carrera administrativa de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
+      },
+      {
+        title: "Rutas de procesos",
+        text: "Configura y da seguimiento a los procesos de liquidación de nómina, afiliación a seguridad social y gestión de carrera administrativa, facilitando auditorías y la toma de decisiones.",
+      },
+    ],
+  },
+};
+
+// Respaldo genérico para productos sin copy definido.
+const fallbackIntro =
+  "Solución tecnológica de Solution Systems sobre tecnología Oracle, con la cercanía y el respaldo técnico de un equipo especializado.";
+const fallback: ProductContent = {
+  intro: fallbackIntro,
+  features: [
+    { title: "Control", text: fallbackIntro },
+    { title: "Informes", text: fallbackIntro },
+    { title: "Rutas de procesos", text: fallbackIntro },
+  ],
+};
+
+const { intro, features } = productContent[slug] ?? fallback;
 
 const cta = headerActions.primary; // "Empezar ahora"
 
@@ -79,9 +150,10 @@ const placeholderMarker =
 <section class="ss-rails bg-surface-muted pb-24 lg:pb-36">
   <div class="space-y-10 lg:space-y-36">
     {
-      features.map((feature) => (
+      features.map((feature, index) => (
         // Banda full-width: los bordes superior/inferior (hairline) cruzan toda
         // la pantalla; la tarjeta blanca se centra al ancho del rail-frame.
+        // La imagen alterna de lado en escritorio (par: izquierda; impar: derecha).
         <div class="border-hairline border-y">
           <article class="nav:max-w-[var(--rail-frame)] mx-auto w-full bg-white">
             <div class="flex flex-col lg:flex-row lg:items-stretch">
@@ -89,7 +161,7 @@ const placeholderMarker =
               <div
                 class:list={[
                   "border-hairline p-3 lg:w-[54%] lg:shrink-0",
-                  feature.imageSide === "left"
+                  index % 2 === 0
                     ? "lg:border-r"
                     : "lg:order-2 lg:border-l",
                 ]}

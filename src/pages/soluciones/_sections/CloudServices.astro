@@ -4,7 +4,7 @@ import { Icon } from "astro-icon/components";
 
 import Container from "@components/layout/Container.astro";
 import Button from "@components/ui/Button.astro";
-import ArchitectureDiagram from "@components/sections/ArchitectureDiagram.astro";
+import ArchitectureDiagram from "./ArchitectureDiagram.astro";
 import { headerActions } from "@config/navigation";
 
 /*
@@ -36,22 +36,22 @@ const illustrationBySlug = new Map(
 
 const cards = [
   {
-    slug: "aws",
-    alt: "Amazon Web Services",
+    slug: "oracle",
+    alt: "Oracle Cloud Infrastructure",
     description:
-      "Infraestructura cloud escalable que garantiza disponibilidad y continuidad operativa 24/7.",
+      "Infraestructura Oracle Cloud (OCI) escalable, que garantiza disponibilidad y continuidad operativa 24/7.",
   },
   {
-    slug: "oracle",
-    alt: "Oracle",
+    slug: "db",
+    alt: "Bases de datos Oracle",
     description:
-      "Bases de datos empresariales con alto rendimiento, seguridad y respaldo.",
+      "Bases de datos Oracle empresariales, con alto rendimiento, seguridad y respaldo.",
   },
   {
     slug: "apex",
     alt: "Oracle APEX",
     description:
-      "Desarrollo de aplicaciones web a medida, con despliegue ágil sobre infraestructura Oracle.",
+      "Desarrollo de aplicaciones a medida en Oracle Apex, con despliegue ágil sobre tu infraestructura Oracle.",
   },
 ] as const;
 
@@ -63,11 +63,10 @@ const mesaImage = illustrationBySlug.get("mesa-ayuda");
 // `informes` en /solutions).
 const informesImage = illustrationBySlug.get("informes");
 
-// TODO: confirmar con Juan — copy definitivo. En Figma va el mismo párrafo dos
-// veces (placeholder).
+// Texto de apoyo de la mesa de ayuda (contenido.md §4).
 const mesaParagraphs = [
-  "Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos, combinando experiencia, cercanía y respaldo técnico especializado.",
-  "Desarrollamos soluciones tecnológicas para bancos, cooperativas y fondos, combinando experiencia, cercanía y respaldo técnico especializado.",
+  "Cada requerimiento se registra, se asigna a un especialista y se resuelve con trazabilidad completa, para que siempre sepas en qué estado se encuentra tu solicitud.",
+  "Complementa tu mesa de ayuda con bolsas de horas contratadas para ajustes, mejoras o desarrollos específicos sobre IAS y RISK.",
 ] as const;
 ---
 
@@ -89,9 +88,9 @@ const mesaParagraphs = [
         <p
           class="text-lead text-ink-secondary mx-auto mt-4 max-w-[720px] font-medium"
         >
-          Desarrollamos soluciones tecnológicas para bancos, cooperativas y
-          fondos, combinando experiencia, cercanía y respaldo técnico
-          especializado.
+          Desplegamos y damos soporte a nuestras soluciones IAS y RISK sobre
+          Oracle Cloud Infrastructure (OCI), con la cercanía y el respaldo
+          técnico de un equipo especializado.
         </p>
 
         <div class="mt-8 flex justify-center">
@@ -166,9 +165,8 @@ const mesaParagraphs = [
       <p
         class="text-lead text-ink-secondary mx-auto mt-4 max-w-[813px] font-medium"
       >
-        Desarrollamos soluciones tecnológicas para bancos, cooperativas y
-        fondos, combinando experiencia, cercanía y respaldo técnico
-        especializado.
+        Soporte técnico con seguimiento de cada requerimiento, desde su creación
+        hasta su solución, y bolsas de horas para ajustes puntuales de software.
       </p>
 
       <div class="mt-6 flex justify-center">
@@ -231,9 +229,9 @@ const mesaParagraphs = [
         <p
           class="text-lead text-ink-secondary mx-auto mt-4 max-w-[813px] font-medium"
         >
-          Desarrollamos soluciones tecnológicas para bancos, cooperativas y
-          fondos, combinando experiencia, cercanía y respaldo técnico
-          especializado.
+          Consolida y genera informes financieros, de riesgo y operativos
+          directamente desde tus bases de datos Oracle, listos para auditoría y
+          toma de decisiones.
         </p>
 
         <div class="mt-6 flex justify-center">
