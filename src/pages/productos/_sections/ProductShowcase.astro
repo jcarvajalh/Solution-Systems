@@ -1,0 +1,195 @@
+---
+import Container from "@components/layout/Container.astro";
+import Button from "@components/ui/Button.astro";
+import { headerActions } from "@config/navigation";
+
+interface Props {
+  /** Slug del producto; resuelve el copy real (contenido.md §3). */
+  slug: string;
+  /** Nombre del producto; titular del hero. */
+  productName: string;
+}
+
+const { slug, productName } = Astro.props;
+
+interface Feature {
+  title: string;
+  text: string;
+}
+
+interface ProductContent {
+  intro: string;
+  features: Feature[];
+}
+
+/*
+  Copy real por producto (contenido.md §3). Los productos que aún no tienen copy
+  definido usan el respaldo genérico de más abajo.
+  TODO: confirmar con Juan — copy real de RISK.
+*/
+const productContent: Record<string, ProductContent> = {
+  "ias-financial": {
+    intro:
+      "Contabilidad, presupuesto, tesorería, facturación, contratos, activos fijos e inventarios, integrados en una sola plataforma sobre tecnología Oracle.",
+    features: [
+      {
+        title: "Control",
+        text: "Centraliza y controla la información contable y presupuestal de tu organización, con trazabilidad completa y reportes ajustados a la normativa vigente.",
+      },
+      {
+        title: "Informes",
+        text: "Genera informes financieros y presupuestales de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
+      },
+      {
+        title: "Rutas de procesos",
+        text: "Configura y da seguimiento a los procesos financieros y administrativos de tu organización, facilitando auditorías y la toma de decisiones.",
+      },
+    ],
+  },
+  "ias-accounts": {
+    intro:
+      "Crédito, cartera, depósitos a la vista, depósitos a plazo, recaudos e inversiones, integrados en una sola plataforma sobre tecnología Oracle.",
+    features: [
+      {
+        title: "Control",
+        text: "Controla en un solo lugar tu cartera de crédito, depósitos a la vista y a plazo, recaudos e inversiones, con trazabilidad completa de cada operación y reportes ajustados a la normativa vigente.",
+      },
+      {
+        title: "Informes",
+        text: "Genera informes de cartera, captaciones y colocaciones de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
+      },
+      {
+        title: "Rutas de procesos",
+        text: "Configura y da seguimiento a los procesos de otorgamiento de crédito, recaudo e inversión de tu organización, facilitando auditorías y la toma de decisiones.",
+      },
+    ],
+  },
+  "ias-human": {
+    intro:
+      "Módulo especializado en la gestión de recursos humanos para empresas del sector gobierno, integrado en una sola plataforma sobre tecnología Oracle.",
+    features: [
+      {
+        title: "Control",
+        text: "Centraliza la información de carrera administrativa, novedades de nómina y afiliaciones a seguridad social de tu personal, con trazabilidad completa y reportes ajustados a la normativa vigente.",
+      },
+      {
+        title: "Informes",
+        text: "Genera informes de nómina, seguridad social y carrera administrativa de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
+      },
+      {
+        title: "Rutas de procesos",
+        text: "Configura y da seguimiento a los procesos de liquidación de nómina, afiliación a seguridad social y gestión de carrera administrativa, facilitando auditorías y la toma de decisiones.",
+      },
+    ],
+  },
+};
+
+// Respaldo genérico para productos sin copy definido.
+const fallbackIntro =
+  "Solución tecnológica de Solution Systems sobre tecnología Oracle, con la cercanía y el respaldo técnico de un equipo especializado.";
+const fallback: ProductContent = {
+  intro: fallbackIntro,
+  features: [
+    { title: "Control", text: fallbackIntro },
+    { title: "Informes", text: fallbackIntro },
+    { title: "Rutas de procesos", text: fallbackIntro },
+  ],
+};
+
+const { intro, features } = productContent[slug] ?? fallback;
+
+const cta = headerActions.primary; // "Empezar ahora"
+
+// Placeholders de imagen (recuadros grises) pendientes de fotos reales.
+const placeholderBox = "flex items-center justify-center bg-section-secondary";
+const placeholderMarker =
+  "border-hairline text-ink-secondary/60 rounded border border-dashed px-3 py-1.5 text-xs tracking-wide uppercase";
+---
+
+{/* Hero */}
+<section
+  class="ss-rails border-hairline border-t bg-white"
+  aria-labelledby="producto-heading"
+>
+  <div class="border-hairline border-b">
+    <Container class="py-16 text-center lg:py-24">
+      <h1
+        id="producto-heading"
+        class="text-display text-ink font-semibold"
+      >
+        {productName}
+      </h1>
+      <p class="text-lead text-ink-secondary mx-auto mt-6 max-w-[813px] font-medium">
+        {intro}
+      </p>
+      <div class="mt-8 flex justify-center">
+        <Button variant="primary" size="md" href={cta.href}>
+          {cta.label}
+        </Button>
+      </div>
+    </Container>
+  </div>
+
+  {/* Galería de miniaturas (placeholders) */}
+  <div>
+    <Container class="py-10 lg:py-12">
+      <ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+        {
+          Array.from({ length: 4 }).map(() => (
+            <li class:list={[placeholderBox, "aspect-[252/163]"]} aria-hidden="true">
+              <span class={placeholderMarker}>Imagen</span>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </div>
+</section>
+
+{/* Bloques de características */}
+<section class="ss-rails bg-surface-muted pb-24 lg:pb-36">
+  <div class="space-y-10 lg:space-y-36">
+    {
+      features.map((feature, index) => (
+        // Banda full-width: los bordes superior/inferior (hairline) cruzan toda
+        // la pantalla; la tarjeta blanca se centra al ancho del rail-frame.
+        // La imagen alterna de lado en escritorio (par: izquierda; impar: derecha).
+        <div class="border-hairline border-y">
+          <article class="nav:max-w-[var(--rail-frame)] mx-auto w-full bg-white">
+            <div class="flex flex-col lg:flex-row lg:items-stretch">
+              {/* Imagen (placeholder) */}
+              <div
+                class:list={[
+                  "border-hairline p-3 lg:w-[54%] lg:shrink-0",
+                  index % 2 === 0
+                    ? "lg:border-r"
+                    : "lg:order-2 lg:border-l",
+                ]}
+              >
+                <div
+                  class:list={[placeholderBox, "aspect-[595/370] w-full"]}
+                  aria-hidden="true"
+                >
+                  <span class={placeholderMarker}>Imagen</span>
+                </div>
+              </div>
+
+              {/* Texto */}
+              <div class="flex flex-1 flex-col items-start justify-center gap-6 px-8 py-10 lg:px-12 lg:py-12">
+                <h2 class="text-ink text-[2rem] leading-[1.2] font-semibold tracking-[-0.04em] sm:text-[2.5rem] sm:leading-[1.3]">
+                  {feature.title}
+                </h2>
+                <p class="text-lead text-ink-secondary max-w-[414px] font-medium">
+                  {feature.text}
+                </p>
+                <Button variant="primary" size="md" href={cta.href}>
+                  {cta.label}
+                </Button>
+              </div>
+            </div>
+          </article>
+        </div>
+      ))
+    }
+  </div>
+</section>

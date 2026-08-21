@@ -20,7 +20,7 @@ const org = {
     "Edificio Santa Mónica Central, Calle 22 Norte #6AN-24, Cali, Valle del Cauca, Colombia",
   emailContacto: "contacto@e-solutionsystems.net",
   emailDatos: null, // p. ej. protecciondedatos@e-solutionsystems.net
-  telefono: "+57 301 813 5745",
+  telefono: "+57 000 000 0000",
   web: null,
   fechaVigencia: null,
   ultimaActualizacion: null,
@@ -50,7 +50,7 @@ const description =
               <dd>
                 {
                   org.fechaVigencia ?? (
-                    <span class="ss-tbd">[DD] de [MES] de [AAAA]</span>
+                    <span>19 de Agosto de 2026</span>
                   )
                 }
               </dd>
@@ -60,7 +60,7 @@ const description =
               <dd>
                 {
                   org.ultimaActualizacion ?? (
-                    <span class="ss-tbd">[DD] de [MES] de [AAAA]</span>
+                    <span>19 de Agosto de 2026</span>
                   )
                 }
               </dd>
@@ -80,9 +80,9 @@ const description =
               <td>
                 {
                   org.razonSocial ?? (
-                    <span class="ss-tbd">[RAZÓN SOCIAL COMPLETA]</span>
+                    <span>Solution Systems S.A.S.</span>
                   )
-                } (en adelante, «Solution Systems»)
+                }
               </td>
             </tr>
             <tr>
@@ -90,7 +90,7 @@ const description =
               <td>
                 {
                   org.nit ?? (
-                    <span class="ss-tbd">[NIT CON DÍGITO DE VERIFICACIÓN]</span>
+                    <span>805017693</span>
                   )
                 }
               </td>
@@ -114,7 +114,7 @@ const description =
               <td>
                 {
                   org.web ?? (
-                    <span class="ss-tbd">[https://www.dominio.com]</span>
+                    <span>https://www.e-solutionsystems.net</span>
                   )
                 }
               </td>
@@ -465,8 +465,8 @@ const description =
               <td>
                 {
                   org.area ?? (
-                    <span class="ss-tbd">
-                      [Oficial de Protección de Datos / Dirección Administrativa]
+                    <span>
+                      Recursos Humanos y Comercial
                     </span>
                   )
                 }
@@ -479,7 +479,7 @@ const description =
                   org.emailDatos ? (
                     <a href={`mailto:${org.emailDatos}`}>{org.emailDatos}</a>
                   ) : (
-                    <span class="ss-tbd">[protecciondedatos@dominio.com]</span>
+                    <span>contacto@e-solutionsystems.net</span>
                   )
                 }
               </td>
@@ -497,17 +497,7 @@ const description =
               <td>
                 {
                   org.horario ?? (
-                    <span class="ss-tbd">[Lunes a viernes, 8:00 a.m. a 5:00 p.m.]</span>
-                  )
-                }
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Formulario web</th>
-              <td>
-                {
-                  org.formularioDerechos ?? (
-                    <span class="ss-tbd">[https://www.dominio.com/proteccion-de-datos]</span>
+                    <span>Lunes a viernes, 8:00 a.m. a 5:00 p.m.</span>
                   )
                 }
               </td>
@@ -766,10 +756,9 @@ const description =
 
         <h2>20. Vigencia</h2>
         <p>
-          La presente política entra en vigencia a partir del <span class="ss-tbd"
-            >[DD] de [MES] de [AAAA]</span
-          > y permanecerá vigente hasta que sea modificada o sustituida por una versión
-          posterior.
+          La presente política entra en vigencia a partir del 19 de Agosto de 2026
+          y permanecerá vigente hasta que sea modificada o sustituida por una
+          versión posterior.
         </p>
       </article>
     </Container>

@@ -2,16 +2,25 @@
 import { Icon } from "astro-icon/components";
 
 import Button from "@components/ui/Button.astro";
+import {
+  formSubmitEndpoint,
+  formSubmitAjaxEndpoint,
+  contactAutoresponse,
+} from "@config/site";
 
 /*
   Formulario de contacto (Figma, Frame 43 · tarjeta derecha). Sitio estático en
-  Cloudflare Pages: el envío se hace desde el navegador con EmailJS + reCAPTCHA
-  v2 Invisible, sin backend propio. La lógica vive en el <script> co-localizado;
-  el markup es HTML nativo con progressive enhancement (funciona el foco/teclado
-  aunque el JS falle, y sin JS simplemente no envía).
+  Cloudflare Pages: el envío se hace con FormSubmit en modo AJAX desde el
+  navegador (fetch), así el usuario NO sale de la página y ve el estado de
+  éxito/error dentro de la misma tarjeta. Sin captcha ni redirección.
 
-  Estilos: Tailwind para layout/inputs/estados; CSS plano para spinner, honeypot
-  y la entrada de los mensajes de error (§5.2). Colores desde tokens (§12.3).
+  El `action` apunta al endpoint nativo solo como respaldo por si el JS no
+  carga; con JS, el submit se intercepta y se envía por AJAX. Anti-spam:
+  honeypot `_honey` + lista negra `_blacklist`. El alias (no el correo real) va
+  en el endpoint para no exponer la dirección de destino. Ver docs/formsubmit.md.
+
+  Estilos: Tailwind para layout/inputs/estados; CSS plano para el spinner, el
+  honeypot y las animaciones de error/éxito (§5.2). Colores desde tokens (§12.3).
 */
 
 const labelCls =
@@ -23,15 +32,33 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
 
 <form
   id="ss-contact-form"
+  action={formSubmitEndpoint}
+  method="POST"
+  data-ajax={formSubmitAjaxEndpoint}
   novalidate
   class="rounded-control border border-black/20 bg-surface-muted p-6 shadow-[0_1px_4px_rgba(0,0,0,0.25)]"
 >
-  {/* Honeypot anti-bots: fuera de pantalla, oculto a lectores y al tabulador. */}
+  {/* --- Campos de control de FormSubmit (ocultos) --- */}
+  <input
+    type="hidden"
+    name="_subject"
+    value="Nuevo contacto desde el sitio web — Solution Systems"
+  />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_autoresponse" value={contactAutoresponse} />
+  <input
+    type="hidden"
+    name="_blacklist"
+    value="SEO services, guest post, crypto, casino, backlink, viagra, loan offer"
+  />
+
+  {/* Honeypot: fuera de pantalla, oculto a lectores y al tabulador. */}
   <div class="ss-hp" aria-hidden="true">
-    <label for="ss-website">No completes este campo</label>
+    <label for="ss-honey">No completes este campo</label>
     <input
-      id="ss-website"
-      name="website"
+      id="ss-honey"
+      name="_honey"
       type="text"
       tabindex="-1"
       autocomplete="off"
@@ -91,7 +118,7 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       <p id="err-email" class={errCls} hidden></p>
     </div>
 
-    {/* Número de teléfono */}
+    {/* Número de teléfono (opcional) */}
     <div>
       <label for="telefono" class={labelCls}>Número de teléfono</label>
       <input
@@ -143,7 +170,8 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       <p id="err-mensaje" class={errCls} hidden></p>
     </div>
 
-    {/* Autorización de tratamiento de datos (Ley 1581 de 2012) */}
+    {/* Autorización de tratamiento de datos (Ley 1581 de 2012).
+        El `value` viaja en el correo como constancia del consentimiento. */}
     <div>
       <div class="flex items-start gap-2.5">
         <input
@@ -152,6 +180,7 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
           type="checkbox"
           required
           aria-required="true"
+          value="Sí, autorizó el tratamiento de datos (Ley 1581 de 2012)"
           class="accent-brand focus-visible:outline-brand mt-0.5 size-4 shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2"
           aria-describedby="err-autorizacion"
         />
@@ -170,10 +199,7 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       <p id="err-autorizacion" class={errCls} hidden></p>
     </div>
 
-    {/* reCAPTCHA v2 Invisible: el widget se monta aquí por JS. */}
-    <div id="ss-recaptcha"></div>
-
-    {/* Estado del envío */}
+    {/* Estado del envío (errores) */}
     <div
       id="ss-status"
       role="status"
@@ -287,54 +313,26 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
 </style>
 
 <script>
-  import emailjs from "@emailjs/browser";
-
-  interface GrecaptchaAPI {
-    render(
-      container: string | HTMLElement,
-      params: {
-        sitekey: string;
-        size: "invisible";
-        callback: (token: string) => void;
-        "error-callback": () => void;
-      },
-    ): number;
-    execute(id: number): void;
-    reset(id: number): void;
-  }
-
-  declare global {
-    interface Window {
-      grecaptcha?: GrecaptchaAPI;
-      ssOnRecaptchaLoad?: () => void;
-    }
-  }
-
   const form = document.getElementById(
     "ss-contact-form",
   ) as HTMLFormElement | null;
 
   if (form) {
-    const SERVICE_ID = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
-    const TEMPLATE_ID = import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID;
-    const PUBLIC_KEY = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY;
-    const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+    const AJAX_ENDPOINT = form.dataset.ajax ?? "";
     const CONTACT_EMAIL = "contacto@e-solutionsystems.net";
 
     const statusEl = document.getElementById("ss-status") as HTMLElement;
     const formBody = document.getElementById("ss-form-body") as HTMLElement;
     const loadingPanel = document.getElementById("ss-loading") as HTMLElement;
     const successPanel = document.getElementById("ss-success") as HTMLElement;
-    const submitBtn = document.getElementById(
-      "ss-submit",
-    ) as HTMLButtonElement;
+    const submitBtn = document.getElementById("ss-submit") as HTMLButtonElement;
     const counter = document.getElementById("ss-counter") as HTMLElement;
     const mensaje = form.elements.namedItem("mensaje") as HTMLTextAreaElement;
-    const honeypot = form.elements.namedItem("website") as HTMLInputElement;
+    const honeypot = form.elements.namedItem("_honey") as HTMLInputElement;
 
     // Validadores por campo. Devuelven el mensaje de error o `null` si es válido.
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRe = /^[0-9+\-\s]{7,20}$/;
+    const phoneRe = /^[0-9+\-\s()]{7,20}$/;
     const rules: Record<string, (value: string) => string | null> = {
       nombre: (v) => (v.trim().length >= 2 ? null : "Ingresa tu nombre."),
       apellido: (v) => (v.trim().length >= 2 ? null : "Ingresa tu apellido."),
@@ -347,7 +345,8 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       mensaje: (v) => {
         const t = v.trim();
         if (t.length < 20) return "El mensaje debe tener al menos 20 caracteres.";
-        if (t.length > 1000) return "El mensaje no puede superar los 1000 caracteres.";
+        if (t.length > 1000)
+          return "El mensaje no puede superar los 1000 caracteres.";
         return null;
       },
     };
@@ -396,53 +395,15 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       const field = form.elements.namedItem(name) as HTMLElement | null;
       field?.addEventListener("blur", () => validateField(name));
     });
-    (form.elements.namedItem("autorizacion") as HTMLInputElement).addEventListener(
-      "change",
-      validateCheckbox,
-    );
+    (
+      form.elements.namedItem("autorizacion") as HTMLInputElement
+    ).addEventListener("change", validateCheckbox);
 
     // Contador del mensaje.
     const updateCounter = () => {
       counter.textContent = `${mensaje.value.length}/1000`;
     };
     mensaje.addEventListener("input", updateCounter);
-
-    // ---- reCAPTCHA v2 Invisible ----
-    let widgetId: number | null = null;
-    let resolveToken: ((token: string) => void) | null = null;
-
-    if (RECAPTCHA_SITE_KEY) {
-      window.ssOnRecaptchaLoad = () => {
-        widgetId =
-          window.grecaptcha?.render("ss-recaptcha", {
-            sitekey: RECAPTCHA_SITE_KEY,
-            size: "invisible",
-            callback: (token) => resolveToken?.(token),
-            "error-callback": () => resolveToken?.(""),
-          }) ?? null;
-      };
-      const script = document.createElement("script");
-      script.src =
-        "https://www.google.com/recaptcha/api.js?onload=ssOnRecaptchaLoad&render=explicit";
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
-
-    const getRecaptchaToken = (): Promise<string> =>
-      new Promise((resolve) => {
-        if (widgetId === null || !window.grecaptcha) {
-          resolve("");
-          return;
-        }
-        resolveToken = resolve;
-        window.grecaptcha.reset(widgetId);
-        window.grecaptcha.execute(widgetId);
-      });
-
-    const resetRecaptcha = () => {
-      if (widgetId !== null) window.grecaptcha?.reset(widgetId);
-    };
 
     // ---- Transiciones y estados ----
     // La ruedita se muestra al menos este tiempo aunque el envío sea instantáneo.
@@ -488,7 +449,7 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       statusEl.textContent = `No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos a ${CONTACT_EMAIL}.`;
     };
 
-    // ---- Envío ----
+    // ---- Envío por AJAX (el usuario no sale de la página) ----
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (submitting) return; // anti doble envío
@@ -507,7 +468,7 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
         return;
       }
 
-      // Entra en estado de carga: la ruedita reemplaza el formulario.
+      // Estado de carga: la ruedita reemplaza el formulario.
       submitting = true;
       submitBtn.disabled = true;
       statusEl.hidden = true;
@@ -519,29 +480,28 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
       try {
         // Honeypot: si viene lleno, no se envía, pero se simula éxito.
         if (honeypot.value === "") {
-          if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-            throw new Error("Faltan variables de entorno de EmailJS.");
-          }
-          const token = await getRecaptchaToken();
-          if (RECAPTCHA_SITE_KEY && !token) {
-            throw new Error("No se obtuvo token de reCAPTCHA.");
-          }
-          const data = new FormData(form);
-          await emailjs.send(
-            SERVICE_ID,
-            TEMPLATE_ID,
-            {
-              from_name: `${data.get("nombre")} ${data.get("apellido")}`.trim(),
-              nombre: data.get("nombre"),
-              apellido: data.get("apellido"),
-              email: data.get("email"),
-              telefono: data.get("telefono") || "No proporcionado",
-              empresa: data.get("empresa") || "No proporcionada",
-              mensaje: data.get("mensaje"),
-              "g-recaptcha-response": token,
+          const fd = new FormData(form);
+          const payload: Record<string, string> = {};
+          fd.forEach((value, key) => {
+            payload[key] = typeof value === "string" ? value : "";
+          });
+          delete payload._honey;
+          payload.telefono = payload.telefono?.trim() || "No proporcionado";
+          payload.empresa = payload.empresa?.trim() || "No proporcionada";
+          payload._replyto = payload.email;
+
+          const res = await fetch(AJAX_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
             },
-            PUBLIC_KEY,
-          );
+            body: JSON.stringify(payload),
+          });
+
+          if (!res.ok) {
+            throw new Error(`FormSubmit respondió ${res.status}`);
+          }
         }
 
         // Mantiene la ruedita al menos MIN_LOADING_MS antes del mensaje.
@@ -556,7 +516,6 @@ const errCls = "ss-field-error mt-1 text-xs font-medium text-critical";
         await showError();
       } finally {
         submitting = false;
-        resetRecaptcha();
       }
     });
   }

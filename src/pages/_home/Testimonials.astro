@@ -33,23 +33,20 @@ async function resolveLogo(slug: string): Promise<string | undefined> {
 }
 
 /*
-  Texto placeholder tomado del diseño de Figma (todas las tarjetas repiten la
-  misma cita). Pendiente de reemplazar por testimonios reales de la colección
-  `testimonials`.
+  Plantilla de testimonio (contenido.md §1). Se deberán reemplazar por citas
+  reales y verificables de clientes distintos a medida que se recolecten.
 */
 // TODO: confirmar con Juan — testimonios reales (autor, empresa, cargo, cita, año).
 const quote =
-  "Optimizamos nuestra operación con Solution Systems. Soporte rápido, equipo que entiende el sector financiero.";
+  "Con Solution Systems optimizamos nuestra operación de [área]. Soporte rápido y un equipo que entiende las necesidades de nuestro negocio.";
 
 type TestimonialSeed = Omit<Testimonial, "logo"> & { companySlug: string };
 
 const seeds: TestimonialSeed[] = [
-  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2023", company: "Empresa cliente", companySlug: "cliente-1" },
-  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2025", company: "Empresa cliente", companySlug: "cliente-2" },
-  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2021", company: "Empresa cliente", companySlug: "cliente-3" },
-  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2022", company: "Empresa cliente", companySlug: "cliente-4" },
-  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2024", company: "Empresa cliente", companySlug: "cliente-5" },
-  { quote, author: "Mauricio Gamboa", role: "Gerente de operaciones", year: "2020", company: "Empresa cliente", companySlug: "cliente-6" },
+  { quote, author: "Nombre", role: "Cargo", year: "", company: "Empresa", companySlug: "cliente-1" },
+  { quote, author: "Nombre", role: "Cargo", year: "", company: "Empresa", companySlug: "cliente-2" },
+  { quote, author: "Nombre", role: "Cargo", year: "", company: "Empresa", companySlug: "cliente-3" },
+  { quote, author: "Nombre", role: "Cargo", year: "", company: "Empresa", companySlug: "cliente-4" },
 ];
 
 const testimonials: Testimonial[] = await Promise.all(

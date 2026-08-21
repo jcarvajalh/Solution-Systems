@@ -3,9 +3,9 @@ import { Icon } from "astro-icon/components";
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Container from "@components/layout/Container.astro";
-import ContactForm from "@components/sections/ContactForm.astro";
-import FAQSection from "@components/sections/FAQSection.astro";
-import CTABanner from "@components/sections/CTABanner.astro";
+import ContactForm from "./_sections/ContactForm.astro";
+import FAQSection from "@shared/FAQSection.astro";
+import CTABanner from "@shared/CTABanner.astro";
 import { siteConfig } from "@config/site";
 
 const description =
@@ -22,7 +22,7 @@ const contactItems = [
     title: "Dirección de nuestra oficina",
     lines: [
       "Edificio Santa Mónica Central",
-      "Calle 22 Norte. #6AN-24",
+      "Calle 22 Norte #6AN-24",
       "Cali, Valle del Cauca",
     ],
   },
@@ -41,9 +41,28 @@ const contactItems = [
   {
     icon: "lucide:clock",
     title: "Horario de atención",
-    lines: ["De lunes a viernes: de 8:00 a 18:00 gmt-5"],
+    lines: ["Lunes a viernes, de 8:00 a 18:00 (GMT-5)"],
   },
 ] as const;
+
+// Preguntas frecuentes propias de la página de contacto (contenido.md §5).
+const contactFaqs = [
+  {
+    question: "¿Cómo agendo una demostración?",
+    answer:
+      "Escríbenos a través del formulario o al correo comercial@e-solutionsystems.net y coordinamos una demo de IAS y/o RISK según tu interés.",
+  },
+  {
+    question: "¿Trabajan con empresas fuera de Colombia?",
+    answer:
+      "Actualmente atendemos organizaciones en 15 departamentos de Colombia. Contáctanos para evaluar tu caso particular.",
+  },
+  {
+    question: "¿Ofrecen capacitación para nuestro equipo?",
+    answer:
+      "Sí, como parte de la implementación incluimos capacitación funcional y técnica para tu equipo.",
+  },
+];
 
 // Datos estructurados (§8). Solo datos verificables del diseño.
 const contactSchema = {
@@ -82,7 +101,7 @@ const contactSchema = {
           <p
             class="text-ink-secondary mt-4 max-w-[394px] text-[1.125rem] leading-[1.9] font-medium tracking-[-0.04em]"
           >
-            ¿Tienes alguna pregunta o comentario? Rellena el formulario y te
+            ¿Tienes alguna pregunta o comentario? Completa el formulario y te
             responderemos lo antes posible.
           </p>
 
@@ -129,7 +148,7 @@ const contactSchema = {
             <p
               class="text-ink-secondary mt-0.5 text-[1.125rem] leading-[1.3] font-medium tracking-[-0.04em]"
             >
-              Normalmente respondemos a las consultas en un plazo de 24 horas.
+              Normalmente respondemos las consultas en un plazo de 24 horas.
             </p>
           </div>
         </div>
@@ -140,7 +159,7 @@ const contactSchema = {
     </Container>
   </section>
 
-  <FAQSection />
+  <FAQSection items={contactFaqs} />
   <CTABanner />
 
   <script

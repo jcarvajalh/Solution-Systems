@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import ProductShowcase from "@components/sections/ProductShowcase.astro";
+import ProductShowcase from "./_sections/ProductShowcase.astro";
 import { products } from "@config/navigation";
 
 export function getStaticPaths() {
@@ -21,5 +21,5 @@ const { product } = Astro.props;
   title={product.name}
   description={`${product.name}: solución tecnológica de Solution Systems para el sector financiero.`}
 >
-  <ProductShowcase productName={product.name} />
+  <ProductShowcase slug={product.slug} productName={product.name} />
 </BaseLayout>
