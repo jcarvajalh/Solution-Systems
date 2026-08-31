@@ -68,7 +68,7 @@ Los nombres y cargos ya están bien; solo homogeneiza los cargos (por ejemplo, "
 3. Productos (ejemplo: IAS Financial)
 Hero
 Título: IAS Financial
-Subtítulo: Contabilidad, presupuesto, tesorería, facturación, contratos, activos fijos e inventarios, integrados en una sola plataforma sobre tecnología Oracle.
+Subtítulo: Nuestro módulo de Análisis Presupuestal te permite visualizar de forma clara y dinámica el comportamiento de los ingresos o gastos, comparando lo apropiado frente a lo efectivamente ejecutado, mes a mes y año a año.
 Bloque — Control
 Centraliza y controla la información contable y presupuestal de tu organización, con trazabilidad completa y reportes ajustados a la normativa vigente.
 
@@ -77,7 +77,7 @@ Genera informes financieros y presupuestales de forma ágil, con datos consolida
 Bloque — Rutas de procesos
 Configura y da seguimiento a los procesos financieros y administrativos de tu organización, facilitando auditorías y la toma de decisiones.
 Título: IAS Accounts
-Subtítulo: Crédito, cartera, depósitos a la vista, depósitos a plazo, recaudos, inversiones, integrados en una sola plataforma sobre tecnología Oracle.
+Subtítulo: Visualiza el recaudo total de tu cartera mes a mes, discriminado entre capital e intereses, dentro del rango de fechas que necesites. Una herramienta clara y ágil para el seguimiento financiero y la toma de decisiones de cobranza.
 Bloque — Control
 Controla en un solo lugar tu cartera de crédito, depósitos a la vista y a plazo, recaudos e inversiones, con trazabilidad completa de cada operación y reportes ajustados a la normativa vigente.
 Bloque — Informes
@@ -85,7 +85,7 @@ Genera informes de cartera, captaciones y colocaciones de forma ágil, con datos
 Bloque — Rutas de procesos
 Configura y da seguimiento a los procesos de otorgamiento de crédito, recaudo e inversión de tu organización, facilitando auditorías y la toma de decisiones.
 Título: IAS Human
-Subtítulo: Modulo especializado en la gestión de recursos humanos para empresas del sector gobierno, integrados en una sola plataforma sobre tecnología Oracle.
+Subtítulo: Centraliza la información clave del recurso humano de tu entidad en un solo lugar: planta de personal, vacantes, nómina, contratistas y capacitaciones, con indicadores de ejecución y cobertura actualizados a la fecha de corte. Una herramienta pensada para que las áreas de talento humano de entidades públicas tomen decisiones más ágiles y basadas en datos.
 Bloque — Control
 Centraliza la información de carrera administrativa, novedades de nómina y afiliaciones a seguridad social de tu personal, con trazabilidad completa y reportes ajustados a la normativa vigente.
 Bloque — Informes
@@ -128,8 +128,8 @@ Título: Ponte en contacto con nosotros
 Subtítulo: ¿Tienes alguna pregunta o comentario? Completa el formulario y te responderemos lo antes posible.
 Información de contacto
 •	Dirección: Edificio Santa Mónica Central, Calle 22 Norte #6AN-24, Cali, Valle del Cauca
-•	Teléfono: +57 301 813 5745
-•	Correo electrónico: contacto@e-solutionsystems.net
+•	Teléfono: +57 310 5294169
+•	Correo electrónico: servcliente@e-solutionsystems.net
 •	Horario de atención: Lunes a viernes, de 8:00 a 18:00 (GMT-5)
 •	Tiempo de respuesta: Normalmente respondemos las consultas en un plazo de 24 horas.
 Preguntas frecuentes
@@ -148,5 +148,5 @@ Soluciones tecnológicas: infraestructura en la nube, gestión de riesgo y sopor
 Productos: RISK · IAS Financial · IAS Human · IAS Accounts 
 Soluciones: Soluciones en la nube · SaaS · IaaS · Mesa de ayuda
 Recursos: Blog · Clientes · Política de privacidad · Acceso a mesa de ayuda
-Contacto: +57 301 813 5745 · comercial@e-solutionsystems.net
+Contacto: +57 310 5294169 · comercial@e-solutionsystems.net
 © 2026 Solution Systems. Todos los derechos reservados.

@@ -1,0 +1,31 @@
+---
+import GroupedBarChart from "./charts/GroupedBarChart.tsx";
+import PercentDonut from "./charts/PercentDonut.tsx";
+import {
+  ausentismo,
+  capacitaciones,
+  estadoPlanta,
+  tipoVinculacion,
+} from "./charts/human-data";
+
+/*
+  Galería del producto IAS Human: recreación vectorial de cuatro paneles del
+  dashboard real. Los componentes son puros, así que se renderizan estáticos (sin
+  `client:*`) y no envían JavaScript al navegador.
+*/
+---
+
+<ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={estadoPlanta} />
+  </li>
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={ausentismo} />
+  </li>
+  <li class="aspect-[252/163]">
+    <PercentDonut data={tipoVinculacion} />
+  </li>
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={capacitaciones} />
+  </li>
+</ul>

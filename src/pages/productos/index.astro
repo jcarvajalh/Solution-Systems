@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Container from "@components/layout/Container.astro";
-import { products } from "@config/navigation";
+import { products, productHref } from "@config/navigation";
 
 // TODO: diseñar el índice de productos (rejilla). Por ahora, lista de enlaces.
 ---
@@ -17,8 +17,11 @@ import { products } from "@config/navigation";
         products.map((product) => (
           <li>
             <a
-              href={`/productos/${product.slug}`}
+              href={productHref(product)}
               class="text-lead text-brand font-medium underline-offset-4 hover:underline"
+              {...(product.externalUrl
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
             >
               {product.name}
             </a>
