@@ -13,8 +13,8 @@ export const siteConfig: SiteConfig = {
   },
   // Datos de contacto tomados del footer de Figma (Frame 32).
   contact: {
-    email: "contacto@e-solutionsystems.net",
-    phone: "+57 000 000 0000",
+    email: "servcliente@e-solutionsystems.net",
+    phone: "+57 310 5294169",
     address: "",
   },
   // Portal de Mesa de Ayuda (Oracle APEX). Fuente única: la usan el botón

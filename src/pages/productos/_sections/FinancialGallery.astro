@@ -1,0 +1,32 @@
+---
+import GroupedBarChart from "./charts/GroupedBarChart.tsx";
+import HorizontalBarChart from "./charts/HorizontalBarChart.tsx";
+import PercentDonut from "./charts/PercentDonut.tsx";
+import {
+  efectivoPorCuenta,
+  estadoResultados,
+  saldosPorEntidad,
+  situacionFinanciera,
+} from "./charts/financial-data";
+
+/*
+  Galería del producto IAS Financial: recreación vectorial de cuatro paneles del
+  dashboard real. Los componentes son puros, así que se renderizan estáticos (sin
+  `client:*`) y no envían JavaScript al navegador.
+*/
+---
+
+<ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={situacionFinanciera} />
+  </li>
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={estadoResultados} />
+  </li>
+  <li class="aspect-[252/163]">
+    <PercentDonut data={efectivoPorCuenta} />
+  </li>
+  <li class="aspect-[252/163]">
+    <HorizontalBarChart data={saldosPorEntidad} />
+  </li>
+</ul>

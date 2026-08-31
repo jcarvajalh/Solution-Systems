@@ -73,6 +73,9 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
                             "text-nav text-ink hover:bg-surface-muted hover:text-brand block rounded-md px-3 py-2 font-medium transition-colors",
                             focusRing,
                           ]}
+                          {...(sub.href.startsWith("http")
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
                         >
                           {sub.label}
                         </a>
@@ -168,6 +171,9 @@ const navLink = ["text-nav font-medium transition-colors", focusRing];
                             "text-nav text-ink-secondary hover:text-brand flex h-10 items-center font-medium",
                             focusRing,
                           ]}
+                          {...(sub.href.startsWith("http")
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
                         >
                           {sub.label}
                         </a>

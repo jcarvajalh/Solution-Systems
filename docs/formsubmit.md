@@ -11,7 +11,7 @@ y **debe hacerla el responsable del correo de destino** (Juan).
 1. En `src/config/site.ts`, deja temporalmente el correo real como alias:
 
    ```ts
-   export const formSubmitAlias = "contacto@e-solutionsystems.net";
+   export const formSubmitAlias = "servcliente@e-solutionsystems.net";
    ```
 
 2. Abre `/contacto` (sirve en local con `npm run dev`) y **envía el formulario

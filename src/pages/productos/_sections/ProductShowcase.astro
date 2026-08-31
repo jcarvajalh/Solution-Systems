@@ -1,7 +1,12 @@
 ---
+import { Image } from "astro:assets";
+
 import Container from "@components/layout/Container.astro";
 import Button from "@components/ui/Button.astro";
 import { headerActions } from "@config/navigation";
+import AccountsGallery from "./AccountsGallery.astro";
+import FinancialGallery from "./FinancialGallery.astro";
+import HumanGallery from "./HumanGallery.astro";
 
 interface Props {
   /** Slug del producto; resuelve el copy real (contenido.md §3). */
@@ -15,6 +20,8 @@ const { slug, productName } = Astro.props;
 interface Feature {
   title: string;
   text: string;
+  /** Slug del archivo en src/assets/images/products/ (sin extensión). */
+  image?: string;
 }
 
 interface ProductContent {
@@ -30,55 +37,49 @@ interface ProductContent {
 const productContent: Record<string, ProductContent> = {
   "ias-financial": {
     intro:
-      "Contabilidad, presupuesto, tesorería, facturación, contratos, activos fijos e inventarios, integrados en una sola plataforma sobre tecnología Oracle.",
+      "Nuestro módulo de Análisis Presupuestal te permite visualizar de forma clara y dinámica el comportamiento de los ingresos o gastos, comparando lo apropiado frente a lo efectivamente ejecutado, mes a mes y año a año.",
     features: [
       {
         title: "Control",
-        text: "Centraliza y controla la información contable y presupuestal de tu organización, con trazabilidad completa y reportes ajustados a la normativa vigente.",
+        text: "FINANCIAL blinda tu operación financiera con controles automáticos de presupuesto, segregación de funciones, trazabilidad y validaciones cruzadas entre módulos, garantizando cumplimiento normativo y transparencia en cada transacción.",
+        image: "financial-control",
       },
       {
         title: "Informes",
-        text: "Genera informes financieros y presupuestales de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
-      },
-      {
-        title: "Rutas de procesos",
-        text: "Configura y da seguimiento a los procesos financieros y administrativos de tu organización, facilitando auditorías y la toma de decisiones.",
+        text: "Con FINANCIAL, cada área cuenta con informes claros, actualizados y trazables, listos para auditorías, entes de control y toma de decisiones gerenciales, sin depender de reportes manuales ni hojas de cálculo dispersas.",
+        image: "financial-informe",
       },
     ],
   },
   "ias-accounts": {
     intro:
-      "Crédito, cartera, depósitos a la vista, depósitos a plazo, recaudos e inversiones, integrados en una sola plataforma sobre tecnología Oracle.",
+      "Visualiza el recaudo total de tu cartera mes a mes, discriminado entre capital e intereses, dentro del rango de fechas que necesites. Una herramienta clara y ágil para el seguimiento financiero y la toma de decisiones de cobranza.",
     features: [
       {
         title: "Control",
-        text: "Controla en un solo lugar tu cartera de crédito, depósitos a la vista y a plazo, recaudos e inversiones, con trazabilidad completa de cada operación y reportes ajustados a la normativa vigente.",
+        text: "ACCOUNTS incorpora controles automáticos sobre toda la operación de captación y colocación de recursos —cartera de créditos, depósitos a la vista y a plazo, e inversiones (CDT)—, garantizando el registro correcto de capital, intereses corrientes y de mora en cada operación. El sistema valida saldos, tasas y plazos de forma automática, evitando inconsistencias entre lo pactado y lo registrado, y asegura una trazabilidad completa de cada movimiento por línea de crédito o producto de captación, fortaleciendo el control interno y la confiabilidad de la información financiera.",
+        image: "accounts-control",
       },
       {
         title: "Informes",
-        text: "Genera informes de cartera, captaciones y colocaciones de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
-      },
-      {
-        title: "Rutas de procesos",
-        text: "Configura y da seguimiento a los procesos de otorgamiento de crédito, recaudo e inversión de tu organización, facilitando auditorías y la toma de decisiones.",
+        text: "ACCOUNTS genera informes en tiempo real sobre saldos de cartera (capital, interés corriente e interés de mora), captaciones a la vista y a plazo, e inversiones vigentes, con comparativos año a año y desglose por línea de crédito. Esta información consolidada permite a la entidad monitorear la composición y evolución de su portafolio de manera ágil, soportar la toma de decisiones financieras y responder oportunamente a requerimientos de entes de control y auditoría.",
+        image: "accounts-informe",
       },
     ],
   },
   "ias-human": {
     intro:
-      "Módulo especializado en la gestión de recursos humanos para empresas del sector gobierno, integrado en una sola plataforma sobre tecnología Oracle.",
+      "Centraliza la información clave del recurso humano de tu entidad en un solo lugar: planta de personal, vacantes, nómina, contratistas y capacitaciones, con indicadores de ejecución y cobertura actualizados a la fecha de corte. Una herramienta pensada para que las áreas de talento humano de entidades públicas tomen decisiones más ágiles y basadas en datos.",
     features: [
       {
         title: "Control",
-        text: "Centraliza la información de carrera administrativa, novedades de nómina y afiliaciones a seguridad social de tu personal, con trazabilidad completa y reportes ajustados a la normativa vigente.",
+        text: "HUMAN incorpora controles automáticos en cada etapa de la gestión de talento humano —liquidación de nómina, vacaciones, carrera administrativa, seguridad social, contratistas y horas extras—, asegurando el cumplimiento de la normatividad laboral y las políticas internas de la entidad. El sistema valida topes legales de horas extras, causación correcta de aportes a seguridad social, cálculo automático de vacaciones y prestaciones, y verifica los requisitos de la carrera administrativa antes de aprobar novedades, reduciendo errores manuales y previniendo contingencias laborales o sanciones ante entes de control.",
+        image: "human-control",
       },
       {
         title: "Informes",
-        text: "Genera informes de nómina, seguridad social y carrera administrativa de forma ágil, con datos consolidados directamente desde la base de datos Oracle, sin reprocesos manuales.",
-      },
-      {
-        title: "Rutas de procesos",
-        text: "Configura y da seguimiento a los procesos de liquidación de nómina, afiliación a seguridad social y gestión de carrera administrativa, facilitando auditorías y la toma de decisiones.",
+        text: "HUMAN genera informes en tiempo real sobre la nómina, novedades, seguridad social, vacaciones causadas y disfrutadas, contratistas vigentes y horas extras reconocidas, con comparativos por periodo y dependencia. Esta información consolidada facilita la rendición de cuentas ante organismos de control (Función Pública, UGPP, entre otros), apoya la planeación del gasto de personal y agiliza la toma de decisiones de la alta dirección en materia de talento humano.",
+        image: "human-informe",
       },
     ],
   },
@@ -92,13 +93,40 @@ const fallback: ProductContent = {
   features: [
     { title: "Control", text: fallbackIntro },
     { title: "Informes", text: fallbackIntro },
-    { title: "Rutas de procesos", text: fallbackIntro },
   ],
 };
 
 const { intro, features } = productContent[slug] ?? fallback;
 
 const cta = headerActions.primary; // "Empezar ahora"
+
+/*
+  Capturas reales por slug de archivo en src/assets/images/products/. Al soltar
+  `<slug>.jpg` en esa carpeta y referenciarlo desde `feature.image` aparece
+  automáticamente; mientras no exista se pinta el placeholder (mismo patrón que
+  ServiceCards). Astro optimiza cada `<Image>` a formatos modernos.
+*/
+const productImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/products/*.{png,jpg,jpeg,webp}",
+  { eager: true },
+);
+const imageBySlug = new Map(
+  Object.entries(productImages).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+
+// Galería recreada (gráficas vectoriales) por producto; el resto usa placeholders.
+const galleryBySlug: Record<string, typeof FinancialGallery> = {
+  "ias-financial": FinancialGallery,
+  "ias-accounts": AccountsGallery,
+  "ias-human": HumanGallery,
+};
+const Gallery = galleryBySlug[slug];
 
 // Placeholders de imagen (recuadros grises) pendientes de fotos reales.
 const placeholderBox = "flex items-center justify-center bg-section-secondary";
@@ -130,18 +158,22 @@ const placeholderMarker =
     </Container>
   </div>
 
-  {/* Galería de miniaturas (placeholders) */}
+  {/* Galería de miniaturas: gráficas recreadas en IAS Financial; placeholders en el resto. */}
   <div>
     <Container class="py-10 lg:py-12">
-      <ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
-        {
-          Array.from({ length: 4 }).map(() => (
-            <li class:list={[placeholderBox, "aspect-[252/163]"]} aria-hidden="true">
-              <span class={placeholderMarker}>Imagen</span>
-            </li>
-          ))
-        }
-      </ul>
+      {
+        Gallery ? (
+          <Gallery />
+        ) : (
+          <ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+            {Array.from({ length: 4 }).map(() => (
+              <li class:list={[placeholderBox, "aspect-[252/163]"]} aria-hidden="true">
+                <span class={placeholderMarker}>Imagen</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </Container>
   </div>
 </section>
@@ -150,28 +182,43 @@ const placeholderMarker =
 <section class="ss-rails bg-surface-muted pb-24 lg:pb-36">
   <div class="space-y-10 lg:space-y-36">
     {
-      features.map((feature, index) => (
+      features.map((feature, index) => {
+        const featureImage = feature.image
+          ? imageBySlug.get(feature.image)
+          : undefined;
+
+        return (
         // Banda full-width: los bordes superior/inferior (hairline) cruzan toda
         // la pantalla; la tarjeta blanca se centra al ancho del rail-frame.
         // La imagen alterna de lado en escritorio (par: izquierda; impar: derecha).
         <div class="border-hairline border-y">
           <article class="nav:max-w-[var(--rail-frame)] mx-auto w-full bg-white">
             <div class="flex flex-col lg:flex-row lg:items-stretch">
-              {/* Imagen (placeholder) */}
+              {/* Imagen: captura real si existe; si no, placeholder. */}
               <div
                 class:list={[
-                  "border-hairline p-3 lg:w-[54%] lg:shrink-0",
+                  "border-hairline flex items-center justify-center p-3 lg:w-[54%] lg:shrink-0",
                   index % 2 === 0
                     ? "lg:border-r"
                     : "lg:order-2 lg:border-l",
                 ]}
               >
-                <div
-                  class:list={[placeholderBox, "aspect-[595/370] w-full"]}
-                  aria-hidden="true"
-                >
-                  <span class={placeholderMarker}>Imagen</span>
-                </div>
+                {featureImage ? (
+                  <Image
+                    src={featureImage}
+                    alt={`Captura del producto: ${feature.title}`}
+                    class="border-hairline w-full rounded border"
+                    sizes="(min-width: 1024px) 640px, 100vw"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    class:list={[placeholderBox, "aspect-[595/370] w-full"]}
+                    aria-hidden="true"
+                  >
+                    <span class={placeholderMarker}>Imagen</span>
+                  </div>
+                )}
               </div>
 
               {/* Texto */}
@@ -189,7 +236,8 @@ const placeholderMarker =
             </div>
           </article>
         </div>
-      ))
+        );
+      })
     }
   </div>
 </section>

@@ -55,6 +55,16 @@
      `src/features/interactive-app/lib/chart-palette.ts` para el porqué. */
   --color-chart-2: #eb6834;
   --color-chart-3: #1baf7a;
+  /* Azul claro (derivado del azul de marca) para la tercera porción de la dona
+     del producto IAS Financial; ver
+     `src/pages/productos/_sections/charts/palette.ts`. Como `--color-chart-3`,
+     queda por debajo de 3:1 sobre blanco: solo se usa con etiqueta visible.
+     TODO: confirmar hex en Figma. */
+  --color-chart-4: #7aa2f5;
+  /* Ámbar para la cuarta categoría de las gráficas del producto (dona "tipo de
+     vinculación" de IAS Human). Reemplaza el amarillo del dashboard original.
+     Solo se usa con etiqueta visible. TODO: confirmar hex en Figma. */
+  --color-chart-5: #f0a900;
 
   /* Línea divisoria de rejillas, tarjetas y rieles. TODO: confirmar hex en Figma. */
   --color-hairline: #e6e6e6;

@@ -1,0 +1,32 @@
+---
+import GroupedBarChart from "./charts/GroupedBarChart.tsx";
+import KpiCards from "./charts/KpiCards.tsx";
+import LineChart from "./charts/LineChart.tsx";
+import {
+  carteraPorLineas,
+  carteraVsAnterior,
+  cifrasCorte,
+  saldosCartera,
+} from "./charts/accounts-data";
+
+/*
+  Galería del producto IAS Accounts: recreación vectorial de cuatro paneles del
+  dashboard real. Los componentes son puros, así que se renderizan estáticos (sin
+  `client:*`) y no envían JavaScript al navegador.
+*/
+---
+
+<ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={saldosCartera} />
+  </li>
+  <li class="aspect-[252/163]">
+    <GroupedBarChart data={carteraVsAnterior} />
+  </li>
+  <li class="aspect-[252/163]">
+    <KpiCards data={cifrasCorte} />
+  </li>
+  <li class="aspect-[252/163]">
+    <LineChart data={carteraPorLineas} />
+  </li>
+</ul>
