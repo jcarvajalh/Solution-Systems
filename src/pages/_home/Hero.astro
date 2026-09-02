@@ -6,7 +6,7 @@ import Container from "@components/layout/Container.astro";
 import Button from "@components/ui/Button.astro";
 import { headerActions } from "@config/navigation";
 
-import heroBackground from "@assets/images/hero-background.jpg";
+import heroVideo from "@assets/videos/hero.mp4";
 import awsLogo from "@assets/images/partners/aws.png";
 import btwLogo from "@assets/images/partners/btw.png";
 import oracleLogo from "@assets/images/partners/oracle.png";
@@ -30,15 +30,15 @@ const partners = [
 <section
   class="ss-hero bg-ink relative flex items-center overflow-hidden py-16"
 >
-  <Image
-    src={heroBackground}
-    alt=""
-    widths={[768, 1024, 1440, 1500]}
-    sizes="100vw"
-    loading="eager"
-    fetchpriority="high"
-    class="absolute inset-0 size-full -scale-x-100 object-cover"
-  />
+  <video
+    src={heroVideo}
+    autoplay
+    loop
+    muted
+    playsinline
+    aria-hidden="true"
+    class="absolute inset-0 size-full object-cover"
+  ></video>
   <div class="ss-hero-scrim absolute inset-0" aria-hidden="true"></div>
 
   <Container class="relative">
@@ -115,14 +115,14 @@ const partners = [
   }
 
   /*
-    Velo de contraste. No existe en Figma: medido sobre la foto original, el
-    subtítulo queda en 1.7:1 y el titular en 1.5:1, cuando AA exige 4.5:1 y 3:1
-    (§9). Con este degradado el mínimo medido sube a 5.1:1 y el cuarto derecho
-    de la imagen —donde está el foco visual— queda intacto.
+    Filtro azul sobre el video. En móvil se usa un velo azul sólido para
+    mantener el contraste AA del titular y el subtítulo sobre cualquier frame
+    del video (§9); en pantallas anchas se aplica el degradado azul de
+    izquierda a derecha que deja libre el cuarto derecho.
     Va en CSS y no en Tailwind por ser un degradado multiparada (§5.2).
   */
   .ss-hero-scrim {
-    background-color: rgb(0 0 0 / 0.62);
+    background-color: rgb(6 17 31 / 0.82);
   }
 
   @media (width >= 72rem) {
@@ -130,10 +130,8 @@ const partners = [
       background-color: transparent;
       background-image: linear-gradient(
         to right,
-        rgb(0 0 0 / 0.62) 0%,
-        rgb(0 0 0 / 0.56) 50%,
-        rgb(0 0 0 / 0.16) 75%,
-        rgb(0 0 0 / 0) 100%
+        rgb(6 17 31 / 1) 0%,
+        rgb(6 17 31 / 0.45) 100%
       );
     }
   }
