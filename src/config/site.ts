@@ -3,8 +3,9 @@ import type { Client, SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
   name: "Solution Systems",
-  description: "",
-  url: "https://example.com",
+  description:
+    "Solution Systems: +26 años desarrollando software financiero para bancos, cooperativas, fondos e institutos del sector gobierno en Colombia. Productos IAS y RISK sobre Oracle Cloud.",
+  url: "https://www.e-solutionsystems.net",
   social: {
     linkedin: "",
     twitter: "",

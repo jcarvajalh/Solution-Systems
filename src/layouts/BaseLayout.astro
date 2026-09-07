@@ -6,11 +6,15 @@ import SupportFab from "@components/layout/SupportFab.astro";
 import { siteConfig } from "@config/site";
 
 export interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
 const { title, description = siteConfig.description } = Astro.props;
+
+// La home no pasa `title`: el <title> queda solo con la marca ("Solution
+// Systems"). Las páginas internas pasan su título y se antepone a la marca.
+const fullTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
 ---
 
 <!doctype html>
@@ -26,7 +30,7 @@ const { title, description = siteConfig.description } = Astro.props;
       type="font/woff2"
       crossorigin
     />
-    <title>{title} | {siteConfig.name}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
   </head>
   <body>
