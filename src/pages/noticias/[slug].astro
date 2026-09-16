@@ -1,0 +1,247 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Container from "@components/layout/Container.astro";
+import CTABanner from "@shared/CTABanner.astro";
+import { siteConfig } from "@config/site";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("news");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<"news"> };
+
+const { entry } = Astro.props;
+const { title, client, clientSlug, summary, source, sourceUrl, date } =
+  entry.data;
+
+const { Content } = await render(entry);
+
+/*
+  Logo del cliente resuelto por slug (mismo patrón que la rejilla de clientes).
+  Si el archivo no existe, no se pinta imagen: la noticia sigue siendo válida.
+*/
+const clientLogos = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/clients/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
+const logo = Object.entries(clientLogos).find(
+  ([path]) => path.split("/").pop()!.replace(/\.[^.]+$/, "") === clientSlug,
+)?.[1].default;
+
+const formattedDate = date
+  ? new Intl.DateTimeFormat("es-CO", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date)
+  : undefined;
+
+const pageUrl = `${siteConfig.url}/noticias/${entry.id}`;
+
+// Datos estructurados: artículo de noticia + miga de pan (§8).
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  headline: title,
+  description: summary,
+  url: pageUrl,
+  ...(formattedDate && date ? { datePublished: date.toISOString() } : {}),
+  author: { "@type": "Organization", name: source },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
+  about: { "@type": "Organization", name: client },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: siteConfig.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Noticias",
+      item: `${siteConfig.url}/#noticias-heading`,
+    },
+    { "@type": "ListItem", position: 3, name: title, item: pageUrl },
+  ],
+};
+---
+
+<BaseLayout title={title} description={summary}>
+  <section class="ss-rails border-hairline border-b bg-white">
+    {/* Franja superior del marco (coherente con /blog). */}
+    <div class="border-hairline h-[53px] border-b"></div>
+
+    <Container class="py-14 lg:py-20">
+      <article class="mx-auto max-w-[720px]">
+        {/* Volver */}
+        <a
+          href="/#noticias-heading"
+          class="text-ink-secondary hover:text-brand ss-tap-target inline-flex items-center gap-1.5 text-[0.875rem] font-medium tracking-[-0.02em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+        >
+          <Icon name="lucide:arrow-left" class="size-4" aria-hidden="true" />
+          Volver a noticias
+        </a>
+
+        {/* Encabezado */}
+        <header class="mt-8">
+          <div class="flex items-center gap-3">
+            {
+              logo && (
+                <Image
+                  src={logo}
+                  alt={`Logo de ${client}`}
+                  class="h-9 w-auto max-w-[120px] object-contain"
+                  loading="eager"
+                  decoding="async"
+                />
+              )
+            }
+            <span
+              class="text-eyebrow text-brand rounded-full bg-brand/10 px-3 py-1 font-semibold uppercase"
+            >
+              {client}
+            </span>
+          </div>
+
+          <h1
+            class="text-ink mt-6 text-[2rem] leading-[1.1] font-semibold tracking-[-0.03em] lg:text-[2.75rem]"
+          >
+            {title}
+          </h1>
+
+          <p
+            class="text-ink-secondary mt-5 text-[1.125rem] leading-[1.4] font-normal tracking-[-0.02em]"
+          >
+            {summary}
+          </p>
+
+          <div
+            class="text-ink-secondary mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.875rem] font-medium tracking-[-0.02em]"
+          >
+            <span>Fuente: {source}</span>
+            {formattedDate && <span aria-hidden="true">·</span>}
+            {formattedDate && <time datetime={date!.toISOString()}>{formattedDate}</time>}
+          </div>
+        </header>
+
+        <hr class="border-hairline my-8" />
+
+        {/* Cuerpo de la noticia */}
+        <div class="ss-article">
+          <Content />
+        </div>
+
+        {/* Fuente original */}
+        {
+          sourceUrl && (
+            <div class="border-hairline mt-10 border-t pt-6">
+              <a
+                href={sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-brand ss-tap-target inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold tracking-[-0.02em] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+              >
+                Ver nota original en {source}
+                <Icon
+                  name="lucide:external-link"
+                  class="size-4"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
+          )
+        }
+      </article>
+    </Container>
+  </section>
+
+  <CTABanner />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(articleSchema)}
+    is:inline
+  />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbSchema)}
+    is:inline
+  />
+</BaseLayout>
+
+<style is:global>
+  /* Tipografía del cuerpo de la noticia (markdown renderizado). Se usa
+     `is:global` acotado a `.ss-article` porque el HTML de <Content /> no recibe
+     el scope de Astro. */
+  .ss-article > * + * {
+    margin-top: 1.25rem;
+  }
+
+  .ss-article p {
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+  }
+
+  .ss-article h2 {
+    color: var(--color-ink);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-top: 2rem;
+  }
+
+  .ss-article h3 {
+    color: var(--color-ink);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-top: 1.75rem;
+  }
+
+  .ss-article ul,
+  .ss-article ol {
+    padding-left: 1.5rem;
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .ss-article ul {
+    list-style: disc;
+  }
+
+  .ss-article ol {
+    list-style: decimal;
+  }
+
+  .ss-article li + li {
+    margin-top: 0.5rem;
+  }
+
+  .ss-article a {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ss-article strong {
+    font-weight: 600;
+  }
+</style>
