@@ -20,7 +20,6 @@ export const siteConfig: SiteConfig = {
   },
   // Portal de Mesa de Ayuda (Oracle APEX). Fuente única: la usan el botón
   // flotante y los botones de "Soporte" / "Mesa de ayuda".
-  // TODO: confirmar con Juan — el `?session=` parece específico de una sesión;
   // conviene una URL de login estable.
   supportUrl:
     "https://g553d75c29da6f6-d9l8quf3dkjc8ult.adb.us-ashburn-1.oraclecloudapps.com/ords/r/ws_ias/solution-systems/login?session=113980180682589",
@@ -30,9 +29,7 @@ export const siteConfig: SiteConfig = {
   Envío del formulario de contacto con FormSubmit (sin backend propio). El
   `formSubmitAlias` es el identificador aleatorio que FormSubmit entrega tras
   confirmar por primera vez el correo de destino; se usa en el `action` en lugar
-  del correo real para no exponerlo a los scrapers de spam. Pasos de activación
-  en docs/formsubmit.md.
-  TODO: confirmar con Juan — reemplazar el alias tras confirmar el correo.
+  del correo real para no exponerlo a los scrapers de spam.
 */
 export const formSubmitAlias = "juan.carvajal03@outlook.com";
 /** Endpoint nativo — solo como respaldo del `action` si el JS no carga. */
