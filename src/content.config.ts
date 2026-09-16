@@ -66,6 +66,31 @@ const clients = defineCollection({
   }),
 });
 
+const news = defineCollection({
+  loader: glob({
+    base: "./src/content/news",
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: z.object({
+    // Titular de la noticia.
+    title: z.string(),
+    // Nombre del cliente tal como se muestra (ej. "INFIHUILA").
+    client: z.string(),
+    // Slug del logo del cliente en src/assets/images/clients/ (ej. "infihuila").
+    clientSlug: z.string(),
+    // Introducción usada en la tarjeta de la home.
+    summary: z.string(),
+    // Medio/fuente de la noticia.
+    source: z.string(),
+    // URL a la nota original; opcional mientras no se confirme.
+    sourceUrl: z.url().optional(),
+    // Fecha de publicación; opcional (no se inventan fechas sin confirmar).
+    date: z.coerce.date().optional(),
+    // Orden de aparición en el carrusel de la home.
+    order: z.number(),
+  }),
+});
+
 const timeline = defineCollection({
   loader: glob({
     base: "./src/content/timeline",
@@ -86,4 +111,5 @@ export const collections = {
   products,
   clients,
   timeline,
+  news,
 };

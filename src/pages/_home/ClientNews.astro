@@ -1,0 +1,73 @@
+---
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import Container from "@components/layout/Container.astro";
+import NewsCarousel, {
+  type NewsCard,
+} from "@components/islands/NewsCarousel";
+
+/*
+  Logos de cliente resueltos por slug (mismo patrón que ClientLogos y la rejilla
+  de clientes): al existir `infihuila.png` en src/assets/images/clients/ aparece
+  en la tarjeta; si falta, se pinta un marcador con las iniciales.
+*/
+const clientLogos = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/clients/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true },
+);
+const logoBySlug = new Map(
+  Object.entries(clientLogos).map(([path, mod]) => [
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, ""),
+    mod.default,
+  ]),
+);
+
+async function resolveLogo(slug: string): Promise<string | undefined> {
+  const asset = logoBySlug.get(slug);
+  if (!asset) return undefined;
+  // 2× el tamaño de pantalla (32 px) para nitidez en pantallas retina.
+  const optimized = await getImage({ src: asset, width: 64, format: "webp" });
+  return optimized.src;
+}
+
+const entries = (await getCollection("news")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const items: NewsCard[] = await Promise.all(
+  entries.map(async (entry) => ({
+    title: entry.data.title,
+    summary: entry.data.summary,
+    client: entry.data.client,
+    href: `/noticias/${entry.id}`,
+    logo: await resolveLogo(entry.data.clientSlug),
+  })),
+);
+---
+
+<section
+  class="ss-rails border-hairline border-b bg-white py-16 lg:py-[95px]"
+  aria-labelledby="noticias-heading"
+>
+  <Container>
+    <h2
+      id="noticias-heading"
+      class="text-ink max-w-[657px] text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.02em] lg:text-[3rem]"
+    >
+      Noticias sobre nuestros clientes
+    </h2>
+    <p
+      class="text-ink-secondary mt-6 max-w-[635px] text-[1.125rem] leading-[1.28] font-normal tracking-[-0.02em]"
+    >
+      Reconocimientos, calificaciones y logros de las entidades financieras que
+      confían en nuestras soluciones tecnológicas.
+    </p>
+  </Container>
+
+  <Container class="mt-12">
+    <NewsCarousel items={items} client:visible />
+  </Container>
+</section>
